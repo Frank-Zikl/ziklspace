@@ -1,0 +1,98 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site';
+import Icon from '../components/Icon.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canvas?: boolean;
+}
+const { title, description = site.description, canvas = false } = Astro.props;
+const pathname = Astro.url.pathname;
+const canonical = Astro.site ? new URL(pathname, Astro.site) : undefined;
+const navigation = [
+  { href: '/', label: '工作台' },
+  { href: '/notes/', label: '笔记' },
+  { href: '/projects/', label: '项目' },
+  { href: '/about/', label: '关于' },
+];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f7f5ed" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content={title ? `${title} · ${site.title}` : site.title}
+    />
+    <meta property="og:description" content={description} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {canonical && <meta property="og:url" content={canonical} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title ? `${title} · ${site.title}` : site.title}</title>
+  </head>
+  <body class:list={{ 'canvas-page': canvas }}>
+    <a class="skip-link" href="#main">
+      跳到主要内容
+    </a>
+    {!canvas && (
+      <header class="site-header shell">
+        <a class="brand" href="/" aria-label="Ziklspace 工作台">
+          <Icon name="star" size={29} />
+          <span>
+            zikl<span class="brand-serif">space</span>
+            <span class="brand-dot">.</span>
+          </span>
+        </a>
+        <nav class="main-nav" aria-label="主要导航">
+          {navigation.map(({ href, label }) => (
+            <a
+              href={href}
+              class:list={{
+                active:
+                  href === '/' ? pathname === '/' : pathname.startsWith(href),
+              }}
+              aria-current={
+                (href === '/' ? pathname === '/' : pathname.startsWith(href))
+                  ? 'page'
+                  : undefined
+              }
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
+        <a class="header-status" href="/now/">
+          <span class="status-dot"></span>近况
+          <Icon name="arrow" size={13} />
+        </a>
+      </header>
+    )}
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    {!canvas && (
+      <footer class="site-footer shell">
+        <div class="footer-signature">
+          <Icon name="star" size={20} />
+          <span>{site.name}</span>
+        </div>
+        <div class="footer-right">
+          <span class="mono">© 2026 ZIKL</span>
+          <a href="/play/">
+            小抽屉 <span aria-hidden="true">↗</span>
+          </a>
+          <a href="#main" aria-label="回到页面顶部">
+            ↑
+          </a>
+        </div>
+      </footer>
+    )}
+  </body>
+</html>

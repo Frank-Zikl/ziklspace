@@ -1,0 +1,72 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import { loadProjects, projectStatusLabels } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const projects = await loadProjects();
+  return projects.map((project) => ({
+    params: { id: project.id },
+    props: { project },
+  }));
+}
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<Layout
+  title={project.data.title}
+  description={project.data.description || project.data.title}
+>
+  <article class="reading-shell">
+    <a class="back-link" href="/projects/">
+      ← 回到项目入口
+    </a>
+    <header class="article-heading">
+      <div class="article-meta">
+        <span>{project.data.category}</span>
+        <span>
+          <span class="status-dot"></span>
+          {projectStatusLabels[project.data.status]}
+        </span>
+      </div>
+      <h1>
+        {project.data.title}
+        <span class="orange-dot" aria-hidden="true">
+          .
+        </span>
+      </h1>
+    </header>
+    <div class="project-detail-art" aria-hidden="true">
+      <span>{project.data.title.toLowerCase()}.</span>
+      <span class="detail-star">
+        <Icon name="star" size={280} />
+      </span>
+    </div>
+    <div class="prose">
+      <Content />
+    </div>
+    <div class="about-links">
+      {project.data.url && (
+        <a href={project.data.url} target="_blank" rel="noopener noreferrer">
+          打开项目 ↗
+        </a>
+      )}
+      {project.data.repository && (
+        <a
+          href={project.data.repository}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub ↗
+        </a>
+      )}
+      <a href="/notes/">笔记 ↗</a>
+      <a href="/play/">小抽屉 ↗</a>
+    </div>
+  </article>
+</Layout>

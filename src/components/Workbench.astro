@@ -1,0 +1,132 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Icon from './Icon.astro';
+import PaperPlay from './PaperPlay.astro';
+import { formatDate, projectStatusLabels } from '../lib/content';
+interface Props {
+  note?: CollectionEntry<'notes'>;
+  update?: CollectionEntry<'updates'>;
+  project?: CollectionEntry<'projects'>;
+}
+const { note: featured, update, project } = Astro.props;
+const featuredTitlePhrases =
+  (featured?.data.title ?? '笔记').match(/[^，]+，?/g) ?? [];
+---
+
+<section
+  class="desk-section shell canvas-workspace"
+  aria-labelledby="desk-title"
+>
+  <h2 id="desk-title" class="sr-only">
+    工作台
+  </h2>
+  <span class="workspace-coordinate mono" aria-hidden="true">
+    [ 00 ]
+  </span>
+  <div class="desk-surface">
+    <div class="desk-grid">
+      {
+        <a
+          class="desk-note desk-item"
+          href={featured ? `/notes/${featured.id}/` : '/notes/'}
+        >
+          <span class="tape" aria-hidden="true"></span>
+          <div class="desk-note-top">
+            <Icon name="book" size={22} />
+            <span class="mono">笔记 / 001</span>
+          </div>
+          <span class="note-category">
+            {featured?.data.category ?? '笔记'}{' '}
+            {featured?.data.sample && <span class="sample-marker">样稿</span>}
+          </span>
+          <h3>
+            {featuredTitlePhrases.map((phrase) => (
+              <span class="title-phrase">{phrase}</span>
+            ))}
+          </h3>
+
+          <div class="note-lines" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="desk-note-bottom">
+            <time class="mono" datetime={featured?.data.date}>
+              {featured ? formatDate(featured.data.date) : '—'}
+            </time>
+            <span class="circle-arrow">
+              <Icon name="arrow" size={20} />
+            </span>
+          </div>
+        </a>
+      }
+
+      <a class="now-note desk-item" href="/now/">
+        <span class="pin" aria-hidden="true"></span>
+        <div class="now-note-top">
+          <span>
+            <span class="status-dot"></span> 近况
+          </span>
+          <span class="mono">NOW</span>
+        </div>
+        <h3>
+          {(update?.data.title ?? '近况').split(' ').map((line, index) => (
+            <>
+              {index > 0 && <br />}
+              {line}
+            </>
+          ))}
+          <span class="orange-dot" aria-hidden="true">
+            .
+          </span>
+        </h3>
+        <ul>
+          {update?.data.items.slice(0, 2).map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+        <div class="now-note-bottom">
+          <span class="mono">
+            {update ? formatDate(update.data.date) : '—'}
+          </span>
+          <Icon name="arrow" size={17} />
+        </div>
+      </a>
+
+      <a
+        class="project-note desk-item"
+        href={project ? `/projects/${project.id}/` : '/projects/'}
+      >
+        <div class="project-top">
+          <span class="mono">项目</span>
+          <Icon name="arrow" size={23} />
+        </div>
+        <div class="project-art" aria-hidden="true">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="orbit orbit-three"></div>
+          <span class="orbit-star">
+            <Icon name="star" size={68} />
+          </span>
+          <span class="orbit-point"></span>
+        </div>
+        <div class="project-note-copy">
+          {project && (
+            <span class="project-status">
+              {projectStatusLabels[project.data.status]}
+            </span>
+          )}
+          <h3>{project?.data.title ?? '项目'}</h3>
+        </div>
+        <div class="project-bottom">
+          <span>打开项目</span>
+          <span class="mono">↗ 01</span>
+        </div>
+      </a>
+
+      <div class="desk-play">
+        <PaperPlay />
+      </div>
+    </div>
+  </div>
+</section>

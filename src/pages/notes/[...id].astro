@@ -1,0 +1,45 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import { loadNotes, formatDate } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const notes = await loadNotes();
+  return notes.map((note) => ({ params: { id: note.id }, props: { note } }));
+}
+interface Props {
+  note: CollectionEntry<'notes'>;
+}
+const { note } = Astro.props;
+const { Content } = await render(note);
+---
+
+<Layout
+  title={note.data.title}
+  description={note.data.description || note.data.title}
+>
+  <article class="reading-shell">
+    <a class="back-link" href="/notes/">
+      ← 翻回笔记本
+    </a>
+    <header class="article-heading">
+      <div class="article-meta">
+        <span>{note.data.category}</span>
+        <time datetime={note.data.date}>{formatDate(note.data.date)}</time>
+        {note.data.sample && <span class="sample-marker">样稿</span>}
+      </div>
+      <h1>{note.data.title}</h1>
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+    <div class="article-end">
+      <span aria-hidden="true">
+        <Icon name="star" size={26} />
+      </span>
+
+      <a href="/notes/">笔记 →</a>
+    </div>
+  </article>
+</Layout>

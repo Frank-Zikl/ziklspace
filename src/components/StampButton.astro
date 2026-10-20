@@ -1,0 +1,23 @@
+---
+import Icon from './Icon.astro';
+---
+
+<button class="loose-stamp" type="button" aria-label="旋转印章" data-stamp>
+  <Icon name="star" size={43} />
+  <span class="sr-only" aria-live="polite" data-stamp-state>
+    0°
+  </span>
+</button>
+<script>
+  document
+    .querySelectorAll<HTMLButtonElement>('[data-stamp]')
+    .forEach((stamp) => {
+      let turns = 0;
+      stamp.addEventListener('click', () => {
+        turns += 45;
+        stamp.style.setProperty('--stamp-turn', `${turns}deg`);
+        const state = stamp.querySelector('[data-stamp-state]');
+        if (state) state.textContent = `${turns % 360}°`;
+      });
+    });
+</script>

@@ -1,0 +1,36 @@
+---
+import Icon from './Icon.astro';
+import CanvasNavigation from './CanvasNavigation.astro';
+import StampButton from './StampButton.astro';
+import { site } from '../data/site';
+---
+
+<section class="canvas-intro" aria-labelledby="canvas-name">
+  <a
+    href="/"
+    class="canvas-origin"
+    aria-label="Ziklspace 工作台"
+    aria-current="page"
+  >
+    <Icon name="star" size={25} />
+  </a>
+  <span class="canvas-edition mono" aria-hidden="true">
+    Z / 2026
+  </span>
+  <div class="canvas-identity">
+    <h1 id="canvas-name">{site.name}</h1>
+    <svg
+      class="signature-loop"
+      viewBox="0 0 450 100"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path d="M16 53C90 4 347 4 420 39c62 30-134 71-290 48C-28 64 11 31 115 26" />
+    </svg>
+    <StampButton />
+  </div>
+  <CanvasNavigation />
+  <span class="intro-registration" aria-hidden="true">
+    +
+  </span>
+</section>

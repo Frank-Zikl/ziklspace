@@ -1,0 +1,47 @@
+---
+import { render } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import PageHeading from '../components/PageHeading.astro';
+import { loadUpdates, loadProjects, formatDate } from '../lib/content';
+const [updates, projects] = await Promise.all([loadUpdates(), loadProjects()]);
+const renderedUpdates = await Promise.all(
+  updates.map(async (update) => ({ update, ...(await render(update)) })),
+);
+---
+
+<Layout title="近况">
+  <section class="content-shell narrow-content">
+    <PageHeading title="近况" />
+    {renderedUpdates.map(({ update, Content }) => (
+      <article class="now-update">
+        <div class="now-update-meta">
+          <span>
+            <span class="status-dot"></span>近况
+          </span>
+          <time datetime={update.data.date} class="mono">
+            {formatDate(update.data.date)}
+          </time>
+        </div>
+        <h2>{update.data.title}</h2>
+        {update.data.items.length > 0 && (
+          <div class="now-checklist">
+            <ul>
+              {update.data.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <div class="prose">
+          <Content />
+        </div>
+        {projects.some((project) => project.id === update.data.project?.id) && (
+          <a class="quiet-link" href={`/projects/${update.data.project!.id}/`}>
+            项目 ↗
+          </a>
+        )}
+      </article>
+    ))}
+    {updates.length === 0 && <span class="empty-label">暂无近况</span>}
+  </section>
+</Layout>

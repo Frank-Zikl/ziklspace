@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+---
+
+<Layout title="关于">
+  <section class="reading-shell about-page">
+    <a class="back-link" href="/">
+      ← 回到工作台
+    </a>
+    <div class="about-mark" aria-hidden="true">
+      <Icon name="star" size={62} />
+    </div>
+    <h1>
+      <span>{site.name}</span>
+      <span class="orange-dot" aria-hidden="true">
+        .
+      </span>
+    </h1>
+    <div class="about-links">
+      <a href="/now/">近况 ↗</a>
+      <a href="/notes/">笔记 ↗</a>
+      <a href="/projects/">项目 ↗</a>
+    </div>
+  </section>
+</Layout>

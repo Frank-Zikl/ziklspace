@@ -1,0 +1,35 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import Icon from '../../components/Icon.astro';
+import { loadProjects, projectStatusLabels } from '../../lib/content';
+const projects = await loadProjects();
+---
+
+<Layout title="项目">
+  <section class="content-shell">
+    <PageHeading title="项目" />
+    <div class="projects-index">
+      {projects.map((project, index) => (
+        <a class="project-preview" href={`/projects/${project.id}/`}>
+          <span class="mono project-number">
+            PROJECT / {String(index + 1).padStart(2, '0')}
+          </span>
+          <div class="project-preview-symbol" aria-hidden="true">
+            <Icon name="star" size={110} />
+          </div>
+          <span class="project-status">
+            {projectStatusLabels[project.data.status]}
+          </span>
+          <h2>{project.data.title}</h2>
+
+          <div class="project-preview-bottom">
+            <span>打开项目</span>
+            <Icon name="arrow" size={23} />
+          </div>
+        </a>
+      ))}
+    </div>
+    {projects.length === 0 && <span class="empty-label">暂无项目</span>}
+  </section>
+</Layout>

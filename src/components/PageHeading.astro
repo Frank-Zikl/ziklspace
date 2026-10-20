@@ -1,0 +1,18 @@
+---
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+
+<div class="page-heading">
+  <a href="/" class="back-link">
+    ← 回到工作台
+  </a>
+  <h1>
+    {title}
+    <span class="orange-dot" aria-hidden="true">
+      .
+    </span>
+  </h1>
+</div>

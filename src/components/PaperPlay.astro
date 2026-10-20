@@ -1,0 +1,207 @@
+---
+import { paperThoughts } from '../data/play';
+interface Props {
+  large?: boolean;
+}
+const { large = false } = Astro.props;
+const paperId = `paper-${crypto.randomUUID()}`;
+---
+
+<div
+  class:list={['paper-play', { 'paper-play-large': large }]}
+  data-paper-widget
+  data-thoughts={JSON.stringify(paperThoughts)}
+>
+  <button
+    class="paper-trigger"
+    type="button"
+    aria-label="打开纸团"
+    aria-haspopup="dialog"
+    data-paper-open
+  >
+    <svg viewBox="0 0 130 120" aria-hidden="true">
+      <defs>
+        <linearGradient id={`${paperId}-light`} x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="#fffef7" />
+          <stop offset="1" stop-color="#e4e0cf" />
+        </linearGradient>
+        <linearGradient id={`${paperId}-mid`} x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="#eee9d8" />
+          <stop offset="1" stop-color="#bcb8a6" />
+        </linearGradient>
+        <linearGradient id={`${paperId}-shade`} x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="#d4ceba" />
+          <stop offset="1" stop-color="#9a9885" />
+        </linearGradient>
+        <filter
+          id={`${paperId}-ambient`}
+          x="-30%"
+          y="-150%"
+          width="160%"
+          height="400%"
+        >
+          <feGaussianBlur stdDeviation="2.4" />
+        </filter>
+        <filter
+          id={`${paperId}-contact`}
+          x="-30%"
+          y="-100%"
+          width="160%"
+          height="300%"
+        >
+          <feGaussianBlur stdDeviation="1.2" />
+        </filter>
+      </defs>
+      <g class="paper-ground">
+        <ellipse
+          cx="74"
+          cy="110"
+          rx="37"
+          ry="5"
+          fill="#50533a"
+          opacity=".2"
+          filter={`url(#${paperId}-ambient)`}
+        />
+        <ellipse
+          cx="69"
+          cy="107"
+          rx="22"
+          ry="3"
+          fill="#42452f"
+          opacity=".2"
+          filter={`url(#${paperId}-contact)`}
+        />
+      </g>
+      <g class="paper-ball">
+        <path
+          d="m35 24 25-11 28 9 21 27-5 34-26 22-33-9-23-22 2-27Z"
+          fill="#e8e3d2"
+          stroke="#beb9a5"
+          stroke-width=".7"
+        />
+        <path d="M35 24 60 13 50 48Z" fill={`url(#${paperId}-light)`} />
+        <path d="M35 24 50 48 24 47Z" fill="#fffdf2" />
+        <path d="M60 13 70 42 50 48Z" fill="#f1eddf" />
+        <path d="M60 13 88 22 70 42Z" fill={`url(#${paperId}-light)`} />
+        <path d="M88 22 80 58 70 42Z" fill={`url(#${paperId}-shade)`} />
+        <path d="M88 22 109 49 80 58Z" fill={`url(#${paperId}-light)`} />
+        <path d="M109 49 87 74 80 58Z" fill="#d9d3c0" />
+        <path d="M109 49 104 83 87 74Z" fill={`url(#${paperId}-shade)`} />
+        <path d="M24 47 44 71 50 48Z" fill={`url(#${paperId}-mid)`} />
+        <path d="M24 47 22 74 44 71Z" fill="#e9e3d1" />
+        <path d="M50 48 70 82 44 71Z" fill="#fffdf0" />
+        <path d="M50 48 70 42 80 58 70 82Z" fill={`url(#${paperId}-light)`} />
+        <path d="M80 58 87 74 70 82Z" fill="#aaa894" />
+        <path d="M44 71 45 96 22 74Z" fill={`url(#${paperId}-mid)`} />
+        <path d="M44 71 70 82 45 96Z" fill="#e7e1ce" />
+        <path d="M70 82 78 105 45 96Z" fill={`url(#${paperId}-shade)`} />
+        <path d="M70 82 104 83 78 105Z" fill={`url(#${paperId}-mid)`} />
+        <path d="M87 74 104 83 70 82Z" fill="#f8f2df" />
+        <path
+          d="m35 24 15 24-26-1 20 24-22 3m28-26 10-35 10 29 18-20-8 36 29-9-22 25 17 9-34 2 8 20-17-23-16 14 5-25 30-13-10-16m-20 6 20 34-26-11m43 3-17 8"
+          fill="none"
+          stroke="#827d6966"
+          stroke-width=".6"
+        />
+      </g>
+    </svg>
+  </button>
+  <dialog
+    class="thought-dialog"
+    aria-labelledby={`${paperId}-title`}
+    data-paper-dialog
+  >
+    <div class="thought-inner">
+      <button
+        class="dialog-close"
+        aria-label="收起纸条"
+        type="button"
+        data-paper-close
+      >
+        ×
+      </button>
+      <h2 id={`${paperId}-title`}>纸团</h2>
+      <p class="thought-text" aria-live="polite" data-thought-text>
+        {paperThoughts[0]}
+      </p>
+      <button class="text-button" type="button" data-thought-next>
+        换一张 <span aria-hidden="true">↻</span>
+      </button>
+    </div>
+  </dialog>
+</div>
+<script>
+  document
+    .querySelectorAll<HTMLElement>('[data-paper-widget]')
+    .forEach((root) => {
+      const thoughts = JSON.parse(root.dataset.thoughts ?? '[]') as string[];
+      const dialog = root.querySelector<HTMLDialogElement>(
+        '[data-paper-dialog]',
+      );
+      const opener = root.querySelector<HTMLButtonElement>('[data-paper-open]');
+      const close = root.querySelector<HTMLButtonElement>('[data-paper-close]');
+      const next = root.querySelector<HTMLButtonElement>('[data-thought-next]');
+      const text = root.querySelector<HTMLElement>('[data-thought-text]');
+      if (
+        !dialog ||
+        !opener ||
+        !close ||
+        !next ||
+        !text ||
+        thoughts.length === 0
+      )
+        return;
+      let index = 0;
+      opener.addEventListener('click', () => dialog.showModal());
+      close.addEventListener('click', () => dialog.close());
+      next.addEventListener('click', () => {
+        index = (index + 1) % thoughts.length;
+        text.textContent = thoughts[index];
+      });
+      dialog.addEventListener('click', (event) => {
+        if (event.target !== dialog) return;
+        const bounds = dialog.getBoundingClientRect();
+        if (
+          event.clientX < bounds.left ||
+          event.clientX > bounds.right ||
+          event.clientY < bounds.top ||
+          event.clientY > bounds.bottom
+        )
+          dialog.close();
+      });
+    });
+</script>
+<style>
+  .paper-ball {
+    filter: drop-shadow(1px 2px 1px #4b503b26);
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.35s;
+  }
+  .paper-trigger:hover svg {
+    transform: none;
+  }
+  .paper-ground {
+    transition: opacity 0.35s;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .paper-trigger:hover .paper-ball {
+      transform: translateY(-7px) rotate(9deg);
+    }
+    .paper-trigger:hover .paper-ground {
+      opacity: 0.65;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .paper-ball,
+    .paper-ground {
+      transition: none;
+    }
+    .paper-trigger:hover .paper-ball {
+      transform: none;
+    }
+    .paper-trigger:hover .paper-ground {
+      opacity: 1;
+    }
+  }
+</style>

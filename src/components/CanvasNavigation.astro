@@ -1,0 +1,32 @@
+---
+import Icon from './Icon.astro';
+---
+
+<nav class="constellation-nav" aria-label="主要导航">
+  <svg class="nav-threads" viewBox="0 0 340 240" fill="none" aria-hidden="true">
+    <path d="M72 49c18 9 41 30 80 66m6 4c40-16 72-20 104-11m-106 20c-5 33-20 47-49 56m64-51c22 32 49 43 93 48" />
+    <circle cx="158" cy="122" r="39" />
+    <path d="m163 74 3 8-8-3M203 129l-8 2 5-7" />
+  </svg>
+  <a href="/notes/" class="nav-object nav-object-notes">
+    <Icon name="book" size={19} />
+    <span>笔记</span>
+    <span class="node-number">01</span>
+  </a>
+  <a href="/projects/" class="nav-object nav-object-projects">
+    <Icon name="folder" size={18} />
+    <span>项目</span>
+    <span class="node-number">02</span>
+  </a>
+  <a href="/about/" class="nav-object nav-object-about">
+    <span>关于</span>
+    <span class="node-number">03</span>
+  </a>
+  <a href="/now/" class="nav-object nav-object-now">
+    <span class="status-dot"></span>
+    <span>近况</span>
+  </a>
+  <a href="/play/" class="nav-object-center" aria-label="小抽屉">
+    <Icon name="spark" size={29} />
+  </a>
+</nav>

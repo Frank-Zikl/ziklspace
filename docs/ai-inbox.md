@@ -26,6 +26,8 @@
 
 仓库提供 Supabase Edge Function `submit-thought` 和 `docs/ai-inbox.openapi.json`。
 
+指定项目的函数已部署（2026-10-21）。启用投递仍需完成第 1 步的密钥设置，再验证真实 HTTP 请求；没有配置密钥时接口返回 503。
+
 1. 在 Supabase Edge Functions 的 Secrets 中设置高熵的 `ROOM_INGEST_TOKEN`（至少 32 个字符）。它只用于这个草稿入口，不是数据库 Service Role Key。
 2. 部署：`supabase functions deploy submit-thought --project-ref ewujzsimqbojxvltzvav`。`supabase/config.toml` 关闭该函数默认 JWT 校验，函数自身会校验独立的 Bearer token；缺少配置时返回 503，错误 token 返回 401。
 3. OpenAPI 文件已指向项目 `ewujzsimqbojxvltzvav`。在支持自定义 HTTP 工具的客户端中配置这个接口，并通过其凭据设置保存该 token。不要把 token 写入聊天提示词或仓库。

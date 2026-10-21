@@ -1,4 +1,8 @@
 -- Run once in the project's SQL editor or with `supabase db push`.
+-- Privileged helpers stay outside the Data API's exposed public schema.
+create schema if not exists private;
+revoke all on schema private from public;
+grant usage on schema private to anon, authenticated;
 create table public.room_owners (
   user_id uuid primary key references auth.users(id),
   singleton boolean not null default true unique check (singleton)
@@ -7,12 +11,12 @@ alter table public.room_owners enable row level security;
 create policy "Owner can inspect own membership" on public.room_owners
   for select to authenticated using (user_id = (select auth.uid()));
 
-create function public.is_room_owner() returns boolean
+create function private.is_room_owner() returns boolean
 language sql stable security definer set search_path = '' as $$
   select exists (select 1 from public.room_owners where user_id = (select auth.uid()));
 $$;
-revoke all on function public.is_room_owner() from public, anon, authenticated;
-grant execute on function public.is_room_owner() to anon, authenticated;
+revoke all on function private.is_room_owner() from public, anon, authenticated;
+grant execute on function private.is_room_owner() to anon, authenticated;
 
 create table public.room_entries (
   id uuid primary key default gen_random_uuid(),
@@ -44,9 +48,12 @@ create table public.room_revisions (
 );
 create index room_revisions_entry on public.room_revisions(entry_id, recorded_at desc);
 
-create function public.preserve_room_revision() returns trigger
+create function private.preserve_room_revision() returns trigger
 language plpgsql security definer set search_path = '' as $$
 begin
+  if not private.is_room_owner() then
+    raise exception 'Owner access required';
+  end if;
   if old.paper_state = 'torn' then
     raise exception 'A torn note is archived and cannot be changed';
   end if;
@@ -59,22 +66,22 @@ begin
   return new;
 end;
 $$;
-revoke all on function public.preserve_room_revision() from public, anon, authenticated;
+revoke all on function private.preserve_room_revision() from public, anon, authenticated;
 create trigger preserve_room_revision before update on public.room_entries
-  for each row execute function public.preserve_room_revision();
+  for each row execute function private.preserve_room_revision();
 
 alter table public.room_entries enable row level security;
 alter table public.room_revisions enable row level security;
 create policy "Read published entries or own drafts" on public.room_entries
-  for select to anon, authenticated using (status = 'published' or (select public.is_room_owner()));
+  for select to anon, authenticated using (status = 'published' or (select private.is_room_owner()));
 create policy "Only owner inserts entries" on public.room_entries
-  for insert to authenticated with check ((select public.is_room_owner()));
+  for insert to authenticated with check ((select private.is_room_owner()));
 create policy "Only owner updates entries" on public.room_entries
-  for update to authenticated using ((select public.is_room_owner())) with check ((select public.is_room_owner()));
+  for update to authenticated using ((select private.is_room_owner())) with check ((select private.is_room_owner()));
 -- Deliberately no DELETE policy or DELETE grant: notes are crossed out or archived.
 create policy "Read only published history or own revisions" on public.room_revisions
   for select to anon, authenticated using (
-    (select public.is_room_owner()) or (
+    (select private.is_room_owner()) or (
       status = 'published' and exists (
         select 1 from public.room_entries entry where entry.id = entry_id and entry.status = 'published'
       )
@@ -94,7 +101,7 @@ create function public.rewrite_sticky(p_id uuid, p_body text, p_expected_updated
 returns setof public.room_entries language plpgsql security invoker set search_path = '' as $$
 declare previous public.room_entries;
 begin
-  if not public.is_room_owner() then raise exception 'Owner access required'; end if;
+  if not private.is_room_owner() then raise exception 'Owner access required'; end if;
   select * into previous from public.room_entries where id = p_id for update;
   if not found or previous.kind <> 'sticky' or previous.paper_state = 'torn' then
     raise exception 'Sticky note is not available';

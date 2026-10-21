@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { PGlite } from '@electric-sql/pglite';
 const owner = '10000000-0000-4000-8000-000000000001';
 const stranger = '10000000-0000-4000-8000-000000000002';
@@ -12,24 +12,58 @@ test('PostgreSQL enforces room ownership, private drafts, history and atomic rew
       create role anon; create role authenticated; create role service_role bypassrls;
       alter default privileges in schema public grant all on tables to anon, authenticated, service_role;
       alter default privileges in schema public grant execute on functions to anon, authenticated, service_role;
-      create schema auth; create table auth.users(id uuid primary key);
+      create schema auth; create table auth.users(id uuid primary key, email text, email_confirmed_at timestamptz);
       create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
       grant usage on schema auth to anon, authenticated;
       grant execute on function auth.uid() to anon, authenticated;
       insert into auth.users values ('${owner}'), ('${stranger}');
     `);
-    await db.exec(
-      await readFile(
-        new URL(
-          '../../supabase/migrations/202610210001_personal_room.sql',
-          import.meta.url,
-        ),
-        'utf8',
-      ),
+    const migrations = new URL('../../supabase/migrations/', import.meta.url);
+    for (const file of (await readdir(migrations))
+      .filter((name) => name.endsWith('.sql'))
+      .sort()) {
+      await db.exec(await readFile(new URL(file, migrations), 'utf8'));
+    }
+    await t.test(
+      'only the configured and verified mailbox becomes the single owner',
+      async () => {
+        await db.query(
+          'insert into private.room_owner_setup(email) values ($1)',
+          ['owner@example.test'],
+        );
+        await db.query('update auth.users set email=$1 where id=$2', [
+          'Owner@Example.Test',
+          owner,
+        ]);
+        await db.query(
+          'update auth.users set email=$1,email_confirmed_at=now() where id=$2',
+          ['visitor@example.test', stranger],
+        );
+        assert.equal(
+          (await db.query('select * from public.room_owners')).rows.length,
+          0,
+        );
+        await db.query(
+          'update auth.users set email_confirmed_at=now() where id=$1',
+          [owner],
+        );
+        assert.deepEqual(
+          (await db.query('select user_id from public.room_owners')).rows,
+          [{ user_id: owner }],
+        );
+        await db.query('update private.room_owner_setup set email=$1', [
+          'visitor@example.test',
+        ]);
+        await db.query(
+          'update auth.users set email_confirmed_at=now() where id=$1',
+          [stranger],
+        );
+        assert.deepEqual(
+          (await db.query('select user_id from public.room_owners')).rows,
+          [{ user_id: owner }],
+        );
+      },
     );
-    await db.query('insert into public.room_owners(user_id) values ($1)', [
-      owner,
-    ]);
     async function as<T>(
       role: string,
       id: string,
@@ -66,6 +100,14 @@ test('PostgreSQL enforces room ownership, private drafts, history and atomic rew
           ['authenticated', stranger],
         ]) {
           await as(role, id, async () => {
+            await assert.rejects(() =>
+              db.query('select * from private.room_owner_setup'),
+            );
+            await assert.rejects(() =>
+              db.query('insert into public.room_owners(user_id) values ($1)', [
+                stranger,
+              ]),
+            );
             const visible = (
               await db.query<{ id: string }>(
                 'select id from public.room_entries',

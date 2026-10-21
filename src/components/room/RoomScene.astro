@@ -1,21 +1,419 @@
----
-// The artwork and transparent objects share the same 16:9 camera.
-// Keep the source image in public so the first frame can load without JavaScript.
----
-
-<img
+<svg
   class="room-art"
-  src="/images/rainy-loft.webp"
-  width="1672"
-  height="941"
-  alt=""
+  viewBox="0 0 960 640"
+  fill="none"
+  shape-rendering="crispEdges"
   aria-hidden="true"
-  fetchpriority="high"
-  decoding="async"
-/>
-<div class="scene-board-preview" data-board-preview aria-hidden="true"></div>
-<div
-  class="scene-lamp-light"
-  style="left:56%;top:38%;width:36%;height:39%"
-  aria-hidden="true"
-></div>
+>
+  <defs>
+    <pattern
+      id="pixel-wall"
+      width="64"
+      height="64"
+      patternUnits="userSpaceOnUse"
+    >
+      <rect width="64" height="64" fill="#eadbb9" />
+      <path d="M12 20h4v4h-4Zm32 28h4v4h-4Z" fill="#e4d3ad" />
+      <path d="M36 8h8v4h-8Z" fill="#f0e3c5" />
+    </pattern>
+    <pattern
+      id="pixel-floor"
+      width="192"
+      height="64"
+      patternUnits="userSpaceOnUse"
+    >
+      <rect width="192" height="64" fill="#ad754c" />
+      <path d="M0 0h192v4H0Zm0 32h192v4H0Z" fill="#855438" />
+      <path d="M0 4h192v4H0Zm0 36h192v4H0Z" fill="#c28b58" />
+      <path d="M60 4h4v28h-4Zm124 32h4v32h-4Z" fill="#8c5b3c" />
+      <path
+        d="M16 16h28v4H16Zm84-4h44v4h-44Zm-20 36h40v4H80Zm60 8h24v4h-24Z"
+        fill="#b98051"
+      />
+      <path d="M24 20h12v4H24Zm92-4h16v4h-16Zm-24 36h16v4H92Z" fill="#9c663f" />
+    </pattern>
+    <pattern
+      id="pixel-rug"
+      width="32"
+      height="32"
+      patternUnits="userSpaceOnUse"
+    >
+      <rect width="32" height="32" fill="#c7bb8a" />
+      <path d="M0 0h16v4H0Zm16 16h16v4H16Z" fill="#d9cea4" />
+      <path d="M0 4h4v4H0Zm16 16h4v4h-4Z" fill="#b2a579" />
+    </pattern>
+  </defs>
+
+  <!-- A continuous game-room shell, with a high north wall and a walkable floor. -->
+  <rect width="960" height="640" fill="#4c3c32" />
+  <rect x="16" y="16" width="928" height="608" fill="#d7c29a" />
+  <rect x="24" y="24" width="912" height="216" fill="url(#pixel-wall)" />
+  <rect x="24" y="240" width="912" height="384" fill="url(#pixel-floor)" />
+  <path
+    d="M0 0h960v12H0Zm0 12h16v612H0Zm944 0h16v624h-16ZM16 624h928v16H16Z"
+    fill="#4b3830"
+  />
+  <path
+    d="M16 12h928v8H16Zm0 8h8v604h-8Zm920 0h8v604h-8ZM24 616h912v8H24Z"
+    fill="#806043"
+  />
+  <path d="M24 24h912v8H24Zm0 8h8v208h-8Zm904 0h8v208h-8Z" fill="#f4e7c8" />
+  <rect x="24" y="208" width="912" height="32" fill="#bd9768" />
+  <rect x="24" y="208" width="912" height="4" fill="#dec28c" />
+  <rect x="24" y="232" width="912" height="8" fill="#72513a" />
+  <rect x="24" y="240" width="912" height="8" fill="#654c38" />
+  <rect x="24" y="248" width="912" height="8" fill="#996b45" />
+  <path d="M272 32h8v176h-8Zm488 0h8v208h-8Z" fill="#d3bd93" />
+  <path d="M280 32h4v176h-4Zm488 0h4v176h-4Z" fill="#f0e1bd" />
+
+  <!-- Dusk outside: hard-edged colour bands, pine silhouettes and pixel stars. -->
+  <g class="room-window">
+    <rect x="44" y="36" width="224" height="100" fill="#b89868" />
+    <rect x="40" y="32" width="224" height="100" fill="#604a39" />
+    <rect x="44" y="36" width="216" height="92" fill="#d2ac74" />
+    <rect x="52" y="44" width="200" height="76" fill="#263c58" />
+    <rect x="52" y="76" width="200" height="44" fill="#35516a" />
+    <rect x="52" y="100" width="200" height="20" fill="#59747d" />
+    <path
+      d="M52 104h12v-8h8v8h8v-16h8v-8h4v12h8v12h12v16H52Zm68 8h8V96h8v-8h4v16h8v8h20v8h-48Zm64-4h8V96h8V84h4v16h8v8h8V92h8v-8h4v16h8v8h12v12h-68Z"
+      fill="#233f48"
+    />
+    <path
+      d="M68 56h4v4h-4Zm48 8h4v4h-4Zm44-12h4v4h-4Zm76 20h4v4h-4Z"
+      fill="#eddfae"
+    />
+    <path d="M204 52h12v4h4v16h-4v4h-12v-4h-4V56h4Z" fill="#f2e5ba" />
+    <path d="M212 52h8v16h-8v-4h-4v-8h4Z" fill="#263c58" />
+    <path d="M104 44h8v76h-8Zm80 0h8v76h-8Z" fill="#b59162" />
+    <path d="M104 44h4v76h-4Zm80 0h4v76h-4ZM52 84h200v4H52Z" fill="#ead0a0" />
+    <rect x="40" y="124" width="224" height="8" fill="#e5c28b" />
+    <rect x="36" y="132" width="232" height="8" fill="#8c6847" />
+    <rect x="44" y="140" width="216" height="4" fill="#b79a70" />
+    <path d="M44 40h8v80h-8Zm200 0h8v80h-8Z" fill="#7c8660" />
+    <path d="M44 40h4v80h-4Zm204 0h4v80h-4Z" fill="#a6ad7b" />
+  </g>
+
+  <!-- The door and a small wall-mounted key board are the room controls. -->
+  <g class="room-scene-door">
+    <rect x="68" y="132" width="96" height="160" fill="#8d754e" />
+    <rect x="64" y="128" width="96" height="160" fill="#594633" />
+    <rect x="68" y="132" width="88" height="152" fill="#b99865" />
+    <rect x="76" y="140" width="72" height="140" fill="#657552" />
+    <rect x="80" y="144" width="64" height="132" fill="#7b8b60" />
+    <rect x="80" y="144" width="4" height="132" fill="#9da678" />
+    <rect x="88" y="156" width="48" height="48" fill="#596b4c" />
+    <rect x="92" y="160" width="40" height="40" fill="#73835b" />
+    <rect x="88" y="220" width="48" height="44" fill="#596b4c" />
+    <rect x="92" y="224" width="40" height="36" fill="#73835b" />
+    <rect x="136" y="208" width="8" height="20" fill="#48553e" />
+    <rect x="136" y="208" width="8" height="8" fill="#d7ba73" />
+    <rect x="140" y="212" width="8" height="4" fill="#f0d595" />
+    <rect x="72" y="280" width="80" height="8" fill="#d1b27b" />
+    <path d="M80 288h64v4h8v8H72v-8h8Z" fill="#6d7050" />
+    <rect x="84" y="292" width="56" height="4" fill="#a5a475" />
+  </g>
+  <g class="room-key">
+    <rect x="212" y="188" width="56" height="56" fill="#b19467" />
+    <rect x="208" y="184" width="56" height="56" fill="#74583c" />
+    <rect x="212" y="188" width="48" height="48" fill="#c4a36c" />
+    <rect x="216" y="192" width="40" height="40" fill="#ddbf86" />
+    <path d="M220 196h4v4h-4Zm28 0h4v4h-4Z" fill="#8c714a" />
+    <rect x="236" y="196" width="12" height="12" fill="#ad894b" />
+    <rect x="236" y="196" width="8" height="8" fill="#f0d58b" />
+    <rect x="240" y="200" width="4" height="4" fill="#b39861" />
+    <path d="M240 204h4v24h-4Zm4 12h8v4h-8Zm0 8h4v4h-4Z" fill="#efd28a" />
+  </g>
+
+  <!-- Empty working surfaces receive real content from the HTML overlay. -->
+  <g class="room-slate">
+    <rect x="348" y="92" width="152" height="92" fill="#bc9c6b" />
+    <rect x="344" y="88" width="152" height="92" fill="#5c4734" />
+    <rect x="348" y="92" width="144" height="84" fill="#be9860" />
+    <rect x="356" y="100" width="128" height="68" fill="#344d42" />
+    <rect x="356" y="100" width="128" height="4" fill="#273f36" />
+    <rect x="356" y="104" width="4" height="64" fill="#416052" />
+    <rect x="348" y="92" width="144" height="4" fill="#dfba7b" />
+    <rect x="340" y="180" width="160" height="8" fill="#725135" />
+    <rect x="344" y="180" width="152" height="4" fill="#dbb77b" />
+    <rect x="464" y="176" width="20" height="4" fill="#eee1bc" />
+    <rect x="448" y="176" width="8" height="4" fill="#b88c6a" />
+  </g>
+  <g class="room-noticeboard">
+    <rect x="540" y="100" width="112" height="80" fill="#c2a372" />
+    <rect x="536" y="96" width="112" height="80" fill="#6c5036" />
+    <rect x="540" y="100" width="104" height="72" fill="#b88f59" />
+    <rect x="544" y="104" width="96" height="64" fill="#c9a96f" />
+    <path
+      d="M548 104h4v4h-4Zm68 0h4v4h-4Zm-4 52h4v4h-4Zm-64 4h4v4h-4Z"
+      fill="#b69562"
+    />
+    <rect x="552" y="112" width="36" height="28" fill="#aa8757" />
+    <rect x="548" y="108" width="36" height="28" fill="#edd696" />
+    <rect x="552" y="108" width="28" height="4" fill="#f8e4b0" />
+    <rect x="564" y="108" width="4" height="4" fill="#b97454" />
+    <path d="M556 120h20v4h-20Zm0 8h12v4h-12Z" fill="#b79e69" />
+    <rect x="600" y="116" width="32" height="24" fill="#aa8757" />
+    <rect x="596" y="112" width="32" height="24" fill="#d9ad92" />
+    <rect x="600" y="112" width="24" height="4" fill="#ecc5a6" />
+    <rect x="608" y="112" width="4" height="4" fill="#64765a" />
+    <path d="M604 124h16v4h-16Z" fill="#a28369" />
+    <rect x="568" y="148" width="36" height="20" fill="#aa8757" />
+    <rect x="564" y="144" width="36" height="20" fill="#becb95" />
+    <rect x="568" y="144" width="28" height="4" fill="#d3dba9" />
+    <rect x="580" y="144" width="4" height="4" fill="#b97454" />
+    <path d="M572 152h16v4h-16Z" fill="#91a374" />
+  </g>
+
+  <g class="room-calendar">
+    <rect x="700" y="148" width="56" height="72" fill="#b79e76" />
+    <rect x="696" y="144" width="56" height="72" fill="#76573c" />
+    <rect x="700" y="148" width="48" height="64" fill="#f1e6c7" />
+    <rect x="700" y="148" width="48" height="12" fill="#b67c59" />
+    <path d="M704 140h4v12h-4Zm32 0h4v12h-4Z" fill="#5b5b46" />
+    <path
+      d="M708 168h4v4h-4Zm12 0h4v4h-4Zm12 0h4v4h-4Zm-24 12h4v4h-4Zm12 0h4v4h-4Zm12 0h4v4h-4Zm-24 12h4v4h-4Zm12 0h4v4h-4Z"
+      fill="#a7a37d"
+    />
+    <rect x="728" y="176" width="12" height="12" fill="#c89665" />
+    <rect x="732" y="180" width="4" height="4" fill="#f5e9c6" />
+  </g>
+
+  <!-- Recessed shelves: cloth spines, page edges and four-pixel joinery. -->
+  <g class="room-bookcase">
+    <rect x="784" y="304" width="128" height="16" fill="#694e36" />
+    <rect x="788" y="316" width="120" height="8" fill="#946b44" />
+    <rect x="784" y="108" width="120" height="196" fill="#594330" />
+    <rect x="904" y="116" width="8" height="188" fill="#8b613e" />
+    <rect x="788" y="112" width="112" height="188" fill="#be915b" />
+    <rect x="796" y="120" width="96" height="172" fill="#76553a" />
+    <path d="M796 120h96v8h-96Zm0 64h96v8h-96Zm0 64h96v8h-96Z" fill="#5d4631" />
+    <path d="M780 104h128v8H780Zm8 4h112v8H788Z" fill="#d6ae73" />
+    <path d="M788 116h4v176h-4Zm108 0h4v176h-4Z" fill="#e1bd85" />
+    <path
+      d="M788 180h112v8H788Zm0 64h112v8H788Zm0 48h112v8H788Z"
+      fill="#d5a96e"
+    />
+    <path d="M792 188h104v4H792Zm0 64h104v4H792Z" fill="#9b7046" />
+    <rect x="800" y="136" width="12" height="44" fill="#6d865e" />
+    <rect x="800" y="136" width="4" height="44" fill="#91a672" />
+    <path d="M804 144h4v12h-4Zm0 24h4v4h-4Z" fill="#d4d5a4" />
+    <rect x="816" y="128" width="16" height="52" fill="#ceb17b" />
+    <path d="M816 128h4v52h-4Zm4 8h8v4h-8Zm0 32h8v4h-8Z" fill="#eddbad" />
+    <rect x="836" y="140" width="12" height="40" fill="#ad7455" />
+    <rect x="836" y="140" width="4" height="40" fill="#ca9470" />
+    <path d="M840 148h4v12h-4Z" fill="#e6c69b" />
+    <rect x="852" y="132" width="16" height="48" fill="#6b7d84" />
+    <rect x="852" y="132" width="4" height="48" fill="#93a5a0" />
+    <path d="M856 140h8v4h-8Zm0 28h8v4h-8Z" fill="#d0d5b5" />
+    <rect x="872" y="148" width="12" height="32" fill="#aea47a" />
+    <rect x="872" y="148" width="4" height="32" fill="#d2c696" />
+    <rect x="800" y="204" width="16" height="40" fill="#c1b58b" />
+    <path d="M800 204h4v40h-4Zm4 8h8v4h-8Z" fill="#e5dab3" />
+    <rect x="820" y="196" width="12" height="48" fill="#7b8d6b" />
+    <path d="M820 196h4v48h-4Zm4 8h4v16h-4Z" fill="#b0bd8e" />
+    <rect x="836" y="212" width="16" height="32" fill="#b58365" />
+    <rect x="836" y="212" width="4" height="32" fill="#d4a384" />
+    <path d="M840 220h8v4h-8Z" fill="#ead4ae" />
+    <rect x="856" y="200" width="12" height="44" fill="#747e85" />
+    <path d="M856 200h4v44h-4Zm4 8h4v16h-4Z" fill="#a4b1ad" />
+    <rect x="872" y="208" width="12" height="36" fill="#baa76d" />
+    <rect x="872" y="208" width="4" height="36" fill="#ddca91" />
+    <rect x="804" y="280" width="76" height="12" fill="#9c6e51" />
+    <rect x="808" y="280" width="68" height="4" fill="#d1a17a" />
+    <rect x="808" y="268" width="64" height="12" fill="#d7c89d" />
+    <path d="M812 268h56v4h-56Zm0 8h56v4h-56Z" fill="#f0e3b9" />
+    <rect x="816" y="260" width="52" height="8" fill="#728063" />
+  </g>
+
+  <!-- The desktop and its legs match the navigation obstacle footprint exactly. -->
+  <g class="room-desk">
+    <rect x="388" y="312" width="272" height="24" fill="#7f573b" />
+    <rect x="396" y="304" width="16" height="20" fill="#765034" />
+    <rect x="632" y="304" width="16" height="20" fill="#765034" />
+    <rect x="400" y="304" width="8" height="12" fill="#bb8b54" />
+    <rect x="636" y="304" width="8" height="12" fill="#bb8b54" />
+    <rect x="392" y="244" width="256" height="60" fill="#6b4c33" />
+    <rect x="396" y="248" width="248" height="40" fill="#cea16a" />
+    <rect x="400" y="252" width="240" height="32" fill="#dbb77d" />
+    <rect x="396" y="248" width="248" height="4" fill="#eed29a" />
+    <path
+      d="M404 264h44v4h-44Zm48 12h28v4h-28Zm128-16h40v4h-40Z"
+      fill="#c49a65"
+    />
+    <rect x="392" y="288" width="256" height="16" fill="#b17e4c" />
+    <rect x="396" y="288" width="248" height="4" fill="#ddbb82" />
+    <rect x="416" y="296" width="56" height="24" fill="#765136" />
+    <rect x="420" y="300" width="48" height="16" fill="#bc8c55" />
+    <rect x="424" y="300" width="40" height="4" fill="#d0a36a" />
+    <rect x="436" y="308" width="16" height="4" fill="#725637" />
+  </g>
+
+  <g class="room-computer">
+    <rect x="484" y="204" width="80" height="60" fill="#aa966b" />
+    <rect x="480" y="200" width="80" height="60" fill="#3c463c" />
+    <rect x="484" y="204" width="72" height="52" fill="#b9bd95" />
+    <rect x="488" y="208" width="64" height="40" fill="#253e40" />
+    <rect x="492" y="212" width="56" height="4" fill="#385a52" />
+    <path
+      d="M496 224h8v4h-8Zm8 4h4v4h-4Zm-8 4h8v4h-8Zm20 0h16v4h-16Z"
+      fill="#a9c99a"
+    />
+    <rect x="512" y="260" width="16" height="8" fill="#7f8a6c" />
+    <rect x="500" y="268" width="40" height="4" fill="#485b49" />
+    <rect x="488" y="276" width="80" height="8" fill="#868e6d" />
+    <rect x="492" y="276" width="72" height="4" fill="#c4c6a0" />
+    <path
+      d="M496 276h4v4h-4Zm12 0h4v4h-4Zm12 0h4v4h-4Zm12 0h4v4h-4Zm12 0h4v4h-4Z"
+      fill="#9ea784"
+    />
+    <rect x="580" y="268" width="8" height="12" fill="#657759" />
+    <rect x="580" y="268" width="8" height="4" fill="#9faf84" />
+  </g>
+  <g class="room-notebook">
+    <rect x="412" y="268" width="44" height="32" fill="#ae8656" />
+    <rect x="408" y="264" width="44" height="32" fill="#687955" />
+    <rect x="412" y="264" width="36" height="28" fill="#e3d7ae" />
+    <rect x="428" y="264" width="4" height="28" fill="#b8ad83" />
+    <path
+      d="M416 272h8v4h-8Zm0 8h8v4h-8Zm20-8h8v4h-8Zm0 8h8v4h-8Z"
+      fill="#c3bc91"
+    />
+    <rect x="440" y="288" width="4" height="8" fill="#b87d5b" />
+  </g>
+  <g class="room-lamp">
+    <g class="lamp-glow" opacity=".32">
+      <path d="M608 224h32v16h8v16h8v24h-64v-24h8v-16h8Z" fill="#f3dc96" />
+      <path d="M600 264h48v12h-48Z" fill="#ffecb1" />
+    </g>
+    <rect x="612" y="256" width="28" height="4" fill="#3e533f" />
+    <rect x="616" y="252" width="20" height="4" fill="#a5af79" />
+    <rect x="624" y="216" width="4" height="36" fill="#657c50" />
+    <rect x="620" y="212" width="4" height="24" fill="#95a66c" />
+    <path d="M616 196h20v4h4v16h-32v-16h8Z" fill="#536e48" />
+    <path d="M616 196h16v4h4v12h-24v-12h4Z" fill="#8da36a" />
+    <rect x="608" y="212" width="32" height="4" fill="#c8ce8e" />
+    <rect x="612" y="216" width="24" height="4" fill="#f6d98e" />
+    <rect x="624" y="192" width="4" height="4" fill="#bdc58a" />
+  </g>
+
+  <!-- A letter tray: its base occupies only the declared inbox collision area. -->
+  <g class="room-inbox">
+    <rect x="676" y="320" width="80" height="16" fill="#775539" />
+    <rect x="676" y="280" width="80" height="48" fill="#675138" />
+    <rect x="680" y="284" width="72" height="40" fill="#a78958" />
+    <rect x="684" y="288" width="64" height="28" fill="#beaa74" />
+    <rect x="680" y="284" width="72" height="4" fill="#dac18b" />
+    <rect x="692" y="304" width="48" height="4" fill="#8e784f" />
+    <rect x="676" y="272" width="80" height="12" fill="#687954" />
+    <rect x="680" y="272" width="72" height="4" fill="#adba82" />
+    <rect x="688" y="256" width="48" height="20" fill="#e9dfbb" />
+    <rect x="692" y="256" width="40" height="4" fill="#fff0ce" />
+    <path d="M696 264h24v4h-24Zm0 8h12v4h-12Z" fill="#bdb28c" />
+    <rect x="740" y="264" width="8" height="12" fill="#c79969" />
+  </g>
+
+  <!-- A walkable woven rug adds warmth while leaving the central aisle clear. -->
+  <rect x="320" y="400" width="352" height="164" fill="#8b6745" />
+  <rect x="324" y="400" width="344" height="160" fill="#697c57" />
+  <rect x="328" y="404" width="336" height="152" fill="#b6ad81" />
+  <rect x="336" y="412" width="320" height="136" fill="#7f8b61" />
+  <rect x="344" y="420" width="304" height="120" fill="url(#pixel-rug)" />
+  <path
+    d="M324 416h4v8h-4Zm0 16h4v8h-4Zm0 16h4v8h-4Zm0 16h4v8h-4Zm0 16h4v8h-4Zm0 16h4v8h-4Zm0 16h4v8h-4Zm0 16h4v8h-4Zm340-112h4v8h-4Zm0 16h4v8h-4Zm0 16h4v8h-4Zm0 16h4v8h-4Zm0 16h4v8h-4Zm0 16h4v8h-4Zm0 16h4v8h-4Zm0 16h4v8h-4Z"
+    fill="#dacda1"
+  />
+  <path
+    d="M348 432h16v4h4v16h-4v4h-16v-4h-4v-16h4Zm276 0h16v4h4v16h-4v4h-16v-4h-4v-16h4Zm-276 76h16v4h4v16h-4v4h-16v-4h-4v-16h4Zm276 0h16v4h4v16h-4v4h-16v-4h-4v-16h4Z"
+    fill="#a89f75"
+  />
+
+  <!-- A moss-green sofa, cream cushions and a folded terracotta throw. -->
+  <g class="room-sofa">
+    <rect x="80" y="536" width="184" height="16" fill="#755137" />
+    <rect x="88" y="540" width="12" height="12" fill="#4b4935" />
+    <rect x="244" y="540" width="12" height="12" fill="#4b4935" />
+    <rect x="80" y="408" width="184" height="112" fill="#394e3c" />
+    <rect x="84" y="408" width="176" height="20" fill="#7c9665" />
+    <rect x="88" y="412" width="168" height="8" fill="#a0af7c" />
+    <rect x="88" y="428" width="168" height="60" fill="#5d7a50" />
+    <rect x="92" y="432" width="160" height="40" fill="#6f8c5b" />
+    <rect x="96" y="476" width="152" height="8" fill="#8a9f6b" />
+    <rect x="72" y="424" width="24" height="112" fill="#415e40" />
+    <rect x="76" y="424" width="16" height="100" fill="#718b58" />
+    <rect x="76" y="424" width="16" height="8" fill="#a3b37d" />
+    <rect x="248" y="424" width="24" height="112" fill="#415e40" />
+    <rect x="252" y="424" width="16" height="100" fill="#718b58" />
+    <rect x="252" y="424" width="16" height="8" fill="#a3b37d" />
+    <rect x="96" y="488" width="152" height="36" fill="#526e48" />
+    <rect x="100" y="488" width="68" height="28" fill="#89a06c" />
+    <rect x="176" y="488" width="68" height="28" fill="#819965" />
+    <path d="M100 488h68v4h-68Zm76 0h68v4h-68Z" fill="#adbc85" />
+    <rect x="96" y="524" width="152" height="12" fill="#4f6944" />
+    <rect x="100" y="524" width="144" height="4" fill="#7f925e" />
+    <path d="M112 432h32v4h4v28h-4v4h-32v-4h-4v-28h4Z" fill="#d6cda7" />
+    <rect x="112" y="436" width="28" height="24" fill="#f0e4bf" />
+    <path d="M116 440h4v4h-4Zm16 12h4v4h-4Z" fill="#dfd2a8" />
+    <path d="M196 440h28v4h4v24h-4v4h-28v-4h-4v-24h4Z" fill="#b9bd8c" />
+    <rect x="196" y="444" width="24" height="20" fill="#d0d2a0" />
+    <path d="M224 416h24v72h-4v12h-20Z" fill="#b87c59" />
+    <path
+      d="M228 416h16v8h-16Zm0 16h16v4h-16Zm0 16h16v4h-16Zm0 16h16v4h-16Zm0 16h12v4h-12Z"
+      fill="#d59f72"
+    />
+    <path d="M224 496h4v8h-4Zm8 0h4v8h-4Zm8-8h4v12h-4Z" fill="#d7b17f" />
+  </g>
+
+  <!-- A leafy plant and curled cat share one compact, blocked corner. -->
+  <g class="room-plant">
+    <rect x="856" y="524" width="32" height="12" fill="#7b573b" />
+    <path d="M856 500h32v8h-4v20h-24v-20h-4Z" fill="#b77d55" />
+    <path d="M860 504h24v8h-4v12h-16v-12h-4Z" fill="#dba06b" />
+    <rect x="856" y="500" width="32" height="8" fill="#e1b67b" />
+    <rect x="860" y="496" width="24" height="8" fill="#6b6643" />
+    <rect x="868" y="444" width="4" height="52" fill="#496146" />
+    <path d="M864 456h8v8h-8Zm8 16h8v8h-8Z" fill="#6b8652" />
+    <path d="M860 436h12v4h4v12h-4v4h-12v-4h-4v-12h4Z" fill="#8ea25e" />
+    <path d="M848 460h12v4h4v12h-12v-4h-4Z" fill="#5c7b4b" />
+    <path d="M876 452h12v4h4v12h-4v4h-12v-4h-4v-12h4Z" fill="#789452" />
+    <path d="M860 440h8v4h-8Zm20 16h8v4h-8Z" fill="#a7b978" />
+  </g>
+  <g class="room-cat">
+    <path
+      d="M792 464h56v4h16v8h8v48h-8v8h-16v8h-56v-8h-12v-8h-4v-48h4v-8h12Z"
+      fill="#4b5038"
+    />
+    <path
+      d="M792 468h56v4h12v8h8v40h-8v8h-12v8h-56v-8h-8v-8h-4v-40h4v-8h8Z"
+      fill="#8b9b63"
+    />
+    <path
+      d="M796 476h48v4h12v8h4v28h-8v8h-12v4h-40v-4h-12v-8h-4v-28h4v-8h8Z"
+      fill="#b2b784"
+    />
+    <path
+      d="M800 480h40v4h12v8h4v20h-8v8h-12v4h-32v-4h-12v-8h-4v-20h8v-8h4Z"
+      fill="#d0cca0"
+    />
+    <path
+      d="M816 476h24v4h8v8h4v20h-8v8h-32v-4h-12v-8h-4v-16h8v-8h12Z"
+      fill="#9e744b"
+    />
+    <path d="M816 480h24v4h8v20h-8v8h-28v-4h-8v-16h4v-8h8Z" fill="#d4ae72" />
+    <path d="M820 488h16v4h8v12h-8v4h-20v-4h-4v-12h8Z" fill="#e5c68b" />
+    <path d="M800 480h8v8h12v-8h8v28h-4v4h-20v-4h-4Z" fill="#ddb97d" />
+    <path d="M800 480h4v8h-4Zm24 0h4v8h-4Z" fill="#a57954" />
+    <path d="M804 496h4v4h-4Zm12 0h4v4h-4Zm-8 8h8v4h-8Z" fill="#6d5940" />
+    <path
+      d="M840 492h8v8h4v12h-4v4h-16v-8h12v-8h-4Z"
+      fill="#b58c59"
+      class="cat-tail"
+    />
+    <path d="M824 484h4v8h-4Zm8 0h4v8h-4Z" fill="#bd925e" />
+  </g>
+
+  <!-- Worn edges and a few loose floor pixels finish the room without adding obstacles. -->
+  <path
+    d="M36 596h8v4h-8Zm212-284h16v4h-16Zm452 76h12v4h-12Zm156 188h16v4h-16Zm-552 20h12v4h-12Z"
+    fill="#c38b58"
+  />
+</svg>

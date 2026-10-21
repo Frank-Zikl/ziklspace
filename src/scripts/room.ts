@@ -1,5 +1,6 @@
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
+import { createRoomMovement, type RoomPoint } from './room-movement';
 import {
   roomClient,
   viewer,
@@ -40,11 +41,13 @@ function initializeRoom(root: HTMLElement) {
   const say = (text: string) => {
     status.textContent = text;
   };
+  let movement: ReturnType<typeof createRoomMovement> | undefined;
   const ownerOnly = new Set(['inbox', 'thought-editor']);
   function openPanel(id: string, opener?: HTMLElement) {
     if (ownerOnly.has(id) && !owner) id = 'account';
     const panel = dialogs.find((dialog) => dialog.dataset.dialog === id);
     if (!panel) return;
+    movement?.cancel();
     if (opener) returnFocus = opener;
     dialogs.forEach((dialog) => {
       if (dialog.open && dialog !== panel) dialog.close();
@@ -52,9 +55,11 @@ function initializeRoom(root: HTMLElement) {
     if (!panel.open) panel.showModal();
   }
   all<HTMLButtonElement>('[data-open]').forEach((button) =>
-    button.addEventListener('click', () =>
-      openPanel(button.dataset.open!, button),
-    ),
+    button.addEventListener('click', () => {
+      if (button.classList.contains('room-hotspot'))
+        approach(button, () => openPanel(button.dataset.open!, button));
+      else openPanel(button.dataset.open!, button);
+    }),
   );
   dialogs.forEach((dialog) => {
     dialog
@@ -103,18 +108,38 @@ function initializeRoom(root: HTMLElement) {
   const surroundings = [scene];
   const viewport = find<HTMLElement>('.room-viewport');
   const world = find<HTMLElement>('.room-world');
-  let previousCameraRange = 0;
-  // The rain-night studio desk sits slightly to the right of the room's center.
-  // This is only the initial frame; scrolling and resizing retain the user's view.
-  let cameraPosition = 0.61;
+  const sceneWidth = Number(world.dataset.sceneWidth) || 960;
+  const sceneHeight = Number(world.dataset.sceneHeight) || 640;
+  let cameraReady = false;
+  let cameraX = 0.5;
+  let cameraY = 0;
+  let previousRangeX = 0;
+  let previousRangeY = 0;
+  const clamp = (value: number, maximum: number) =>
+    Math.max(0, Math.min(maximum, value));
   const frameRoom = () => {
-    const range = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+    const rangeX = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+    const rangeY = Math.max(0, viewport.scrollHeight - viewport.clientHeight);
+    if (!cameraReady) {
+      cameraX = rangeX
+        ? clamp(world.offsetWidth * 0.5 - viewport.clientWidth / 2, rangeX) /
+          rangeX
+        : 0.5;
+      cameraY = rangeY
+        ? clamp(
+            world.offsetHeight * (440 / 640) - viewport.clientHeight * 0.78,
+            rangeY,
+          ) / rangeY
+        : 0;
+      cameraReady = true;
+    }
     viewport.scrollTo({
-      left: range * cameraPosition,
-      top: 0,
-      behavior: 'auto',
+      left: rangeX * cameraX,
+      top: rangeY * cameraY,
+      behavior: 'instant',
     });
-    previousCameraRange = range;
+    previousRangeX = rangeX;
+    previousRangeY = rangeY;
   };
   const cameraObserver = new ResizeObserver(frameRoom);
   cameraObserver.observe(viewport);
@@ -122,18 +147,67 @@ function initializeRoom(root: HTMLElement) {
   viewport.addEventListener(
     'scroll',
     () => {
-      const range = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
-      if (range > 0 && range === previousCameraRange) {
-        cameraPosition = Math.max(0, Math.min(1, viewport.scrollLeft / range));
-      }
-      // The cover camera is vertically composed in CSS; focusing a cropped object
-      // must never scroll the hidden vertical axis and reveal the scene edges.
-      if (viewport.scrollTop !== 0) viewport.scrollTop = 0;
+      const rangeX = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+      const rangeY = Math.max(0, viewport.scrollHeight - viewport.clientHeight);
+      if (rangeX && rangeX === previousRangeX)
+        cameraX = viewport.scrollLeft / rangeX;
+      if (rangeY && rangeY === previousRangeY)
+        cameraY = viewport.scrollTop / rangeY;
     },
     { passive: true },
   );
+  function followCharacter(point: RoomPoint, moving: boolean) {
+    if (!moving) return;
+    const x = (point.x / sceneWidth) * world.offsetWidth;
+    const y = (point.y / sceneHeight) * world.offsetHeight;
+    let left = viewport.scrollLeft;
+    let top = viewport.scrollTop;
+    if (x < left + viewport.clientWidth * 0.22)
+      left = x - viewport.clientWidth * 0.22;
+    if (x > left + viewport.clientWidth * 0.78)
+      left = x - viewport.clientWidth * 0.78;
+    if (y < top + viewport.clientHeight * 0.28)
+      top = y - viewport.clientHeight * 0.28;
+    if (y > top + viewport.clientHeight * 0.82)
+      top = y - viewport.clientHeight * 0.82;
+    viewport.scrollTo({ left, top, behavior: 'instant' });
+  }
+  movement = createRoomMovement({
+    world,
+    avatar: find('[data-room-avatar]'),
+    target: find('[data-walk-target]'),
+    width: sceneWidth,
+    height: sceneHeight,
+    bounds: { x: 32, y: 280, width: 896, height: 328 },
+    obstacles: [
+      { x: 384, y: 256, width: 280, height: 80 },
+      { x: 784, y: 248, width: 128, height: 72 },
+      { x: 72, y: 416, width: 200, height: 136 },
+      { x: 776, y: 464, width: 112, height: 80 },
+      { x: 672, y: 280, width: 88, height: 56 },
+    ],
+    clearance: 8,
+    start: { x: 480, y: 440 },
+    onUpdate: followCharacter,
+  });
+  function approach(button: HTMLElement, action: () => void) {
+    const x = Number(button.dataset.walkX);
+    const y = Number(button.dataset.walkY);
+    if (!movement || !Number.isFinite(x) || !Number.isFinite(y)) {
+      action();
+      return;
+    }
+    void movement.walkTo({ x, y }, { onArrival: action });
+  }
   let pointerFocusTarget: HTMLElement | null = null;
   let pointerFocusTimer: number | undefined;
+  let gesture: {
+    x: number;
+    y: number;
+    left: number;
+    top: number;
+    dragged: boolean;
+  } | null = null;
   const clearPointerFocus = () => {
     window.clearTimeout(pointerFocusTimer);
     pointerFocusTarget = null;
@@ -141,50 +215,93 @@ function initializeRoom(root: HTMLElement) {
   viewport.addEventListener(
     'pointerdown',
     (event) => {
+      if (!event.isPrimary || event.button !== 0) return;
       window.clearTimeout(pointerFocusTimer);
       pointerFocusTarget = (event.target as HTMLElement).closest<HTMLElement>(
         '.room-hotspot',
       );
+      gesture = {
+        x: event.clientX,
+        y: event.clientY,
+        left: viewport.scrollLeft,
+        top: viewport.scrollTop,
+        dragged: false,
+      };
     },
     { capture: true },
   );
   window.addEventListener(
+    'pointermove',
+    (event) => {
+      if (
+        gesture &&
+        Math.hypot(event.clientX - gesture.x, event.clientY - gesture.y) > 8
+      )
+        gesture.dragged = true;
+    },
+    { passive: true },
+  );
+  window.addEventListener(
     'pointerup',
     () => {
-      // Touch browsers may synthesize mouse focus after pointerup. Keep the target
-      // stationary through that event sequence, then allow later programmatic focus.
       pointerFocusTimer = window.setTimeout(clearPointerFocus, 0);
     },
     { capture: true },
   );
-  window.addEventListener('pointercancel', clearPointerFocus, {
-    capture: true,
+  window.addEventListener(
+    'pointercancel',
+    () => {
+      if (gesture) gesture.dragged = true;
+      clearPointerFocus();
+    },
+    { capture: true },
+  );
+  window.addEventListener('blur', () => {
+    clearPointerFocus();
+    movement?.cancel();
   });
-  window.addEventListener('blur', clearPointerFocus);
-  viewport.addEventListener('keydown', clearPointerFocus);
+  viewport.addEventListener('keydown', (event) => {
+    clearPointerFocus();
+    if (event.key === 'Escape') movement?.cancel();
+  });
+  viewport.addEventListener(
+    'click',
+    (event) => {
+      if (
+        event.detail &&
+        gesture &&
+        (gesture.dragged ||
+          Math.hypot(
+            viewport.scrollLeft - gesture.left,
+            viewport.scrollTop - gesture.top,
+          ) > 8)
+      ) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+    },
+    { capture: true },
+  );
+  viewport.addEventListener('click', (event) => {
+    if (
+      (event.target as HTMLElement).closest('.room-hotspot') ||
+      !entry.hidden ||
+      dialogs.some((dialog) => dialog.open)
+    )
+      return;
+    void movement?.walkTo(
+      movement.fromClientPoint(event.clientX, event.clientY),
+    );
+  });
   viewport.addEventListener('focusin', (event) => {
     const object = (event.target as HTMLElement).closest<HTMLElement>(
       '.room-hotspot',
     );
-    viewport.scrollTop = 0;
-    // Keep pointer targets stationary between pressing and releasing a click.
-    // Tab and explicit focus() can reveal objects regardless of focus-ring heuristics.
     if (!object || object === pointerFocusTarget) return;
-    const view = viewport.getBoundingClientRect();
-    const target = object.getBoundingClientRect();
-    const inset = 12;
-    if (target.left >= view.left + inset && target.right <= view.right - inset)
-      return;
-    const range = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
-    const left =
-      viewport.scrollLeft +
-      target.left -
-      view.left -
-      (view.width - target.width) / 2;
-    viewport.scrollTo({
-      left: Math.max(0, Math.min(range, left)),
-      top: 0,
-      behavior: 'auto',
+    object.scrollIntoView({
+      block: 'nearest',
+      inline: 'nearest',
+      behavior: 'instant',
     });
   });
   let entering = false;
@@ -199,6 +316,7 @@ function initializeRoom(root: HTMLElement) {
     entering = false;
   };
   function showDoor() {
+    movement?.cancel();
     window.clearTimeout(entryTimer);
     entering = false;
     entry.hidden = false;
@@ -226,7 +344,9 @@ function initializeRoom(root: HTMLElement) {
   }
   find('[data-enter]').addEventListener('click', () => enterRoom());
   find('[data-skip-entry]').addEventListener('click', () => enterRoom(true));
-  find('[data-reenter]').addEventListener('click', showDoor);
+  find('[data-reenter]').addEventListener('click', () =>
+    approach(find('[data-reenter]'), showDoor),
+  );
   entry.setAttribute('role', 'dialog');
   entry.setAttribute('aria-modal', 'true');
   entry.setAttribute('aria-label', '房间入口');
@@ -252,23 +372,26 @@ function initializeRoom(root: HTMLElement) {
   }
   if (!visited && !linkedThought) showDoor();
 
-  find<HTMLButtonElement>('[data-lamp]').addEventListener('click', (event) => {
-    const night = document.body.classList.toggle('night');
-    (event.currentTarget as HTMLElement).setAttribute(
-      'aria-pressed',
-      String(night),
-    );
-  });
+  const lamp = find<HTMLButtonElement>('[data-lamp]');
+  lamp.addEventListener('click', () =>
+    approach(lamp, () => {
+      const night = document.body.classList.toggle('night');
+      lamp.setAttribute('aria-pressed', String(night));
+    }),
+  );
   let catTimer: number | undefined;
-  find('[data-cat]').addEventListener('click', () => {
-    root.classList.add('cat-awake');
-    say('喵。');
-    clearTimeout(catTimer);
-    catTimer = window.setTimeout(() => {
-      root.classList.remove('cat-awake');
-      say('');
-    }, 1800);
-  });
+  const cat = find('[data-cat]');
+  cat.addEventListener('click', () =>
+    approach(cat, () => {
+      root.classList.add('cat-awake');
+      say('喵。');
+      clearTimeout(catTimer);
+      catTimer = window.setTimeout(() => {
+        root.classList.remove('cat-awake');
+        say('');
+      }, 1800);
+    }),
+  );
 
   all<HTMLButtonElement>('[data-read-book]').forEach((button) =>
     button.addEventListener('click', () => {

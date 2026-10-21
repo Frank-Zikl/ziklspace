@@ -1,0 +1,118 @@
+<div
+  class="room-avatar"
+  data-room-avatar
+  data-direction="down"
+  data-walking="false"
+  style="left:50%;top:68.75%"
+  role="img"
+  aria-label="你的小人"
+>
+  <svg
+    class="room-avatar-sprite"
+    viewBox="0 0 16 24"
+    shape-rendering="crispEdges"
+    aria-hidden="true"
+  >
+    <defs>
+      <g id="room-avatar-side">
+        <path fill="#262537" d="M5 1h5v1h2v2h1v6h-2v2H6v-1H4V9H3V5h1V2h1z" />
+        <path fill="#e9af7d" d="M4 6h5v1h1v4H5v-1H3V8h1z" />
+        <path fill="#f6c99b" d="M4 6h3v2H5v2H4z" />
+        <path fill="#262537" d="M4 4h7v3H7V6H5v1H4zM4 8h1v1H4z" />
+        <path fill="#765341" d="M9 7h2v3H9z" />
+        <path fill="#365b55" d="M5 12h5v1h2v6H4v-5h1z" />
+        <path fill="#77947a" d="M5 12h3v2H6v4H4v-4h1z" />
+        <path fill="#243b40" d="M10 13h3v5h-3z" />
+        <path fill="#adc0a0" d="M5 14h2v4H5z" />
+        <path fill="#e9af7d" d="M5 18h2v2H5z" />
+        <path fill="#303345" d="M5 20h6v2H5z" />
+        <g class="avatar-foot avatar-foot-left">
+          <path fill="#303345" d="M5 21h3v2H5z" />
+          <path fill="#c5a17a" d="M3 23h5v1H3z" />
+        </g>
+        <g class="avatar-foot avatar-foot-right">
+          <path fill="#303345" d="M9 21h2v2H9z" />
+          <path fill="#846b58" d="M8 23h4v1H8z" />
+        </g>
+      </g>
+    </defs>
+    <g data-avatar-facing="down">
+      <path fill="#262537" d="M5 1h6v1h2v2h1v6h-2v2H4v-2H2V4h1V2h2z" />
+      <path fill="#ce936a" d="M3 7h2v3H3zM11 7h2v3h-2z" />
+      <path fill="#efb985" d="M4 5h8v6h-1v1H5v-1H4z" />
+      <path fill="#ffd2a1" d="M4 6h7v3H4z" />
+      <path
+        fill="#262537"
+        d="M3 4h10v2H9v1H6V6H4v2H3zM5 8h1v1H5zM10 8h1v1h-1z"
+      />
+      <path fill="#ba7962" d="M7 10h2v1H7z" />
+      <path fill="#365b55" d="M4 12h8v1h1v6H3v-6h1z" />
+      <path fill="#77947a" d="M4 12h3v2h2v-2h3v2h-1v4H5v-4H4z" />
+      <path fill="#adc0a0" d="M6 14h1v3H6zM9 14h1v3H9z" />
+      <path fill="#365b55" d="M2 13h2v5H2zM12 13h2v5h-2z" />
+      <path fill="#efb985" d="M2 18h2v2H2zM12 18h2v2h-2z" />
+      <path fill="#303345" d="M4 19h8v2H4z" />
+      <g class="avatar-foot avatar-foot-left">
+        <path fill="#303345" d="M4 21h3v2H4z" />
+        <path fill="#c5a17a" d="M3 23h4v1H3z" />
+      </g>
+      <g class="avatar-foot avatar-foot-right">
+        <path fill="#303345" d="M9 21h3v2H9z" />
+        <path fill="#c5a17a" d="M9 23h4v1H9z" />
+      </g>
+    </g>
+    <g data-avatar-facing="up">
+      <path fill="#262537" d="M5 1h6v1h2v2h1v6h-2v2H4v-2H2V4h1V2h2z" />
+      <path fill="#403340" d="M4 3h7v1H4zM3 4h2v3H3z" />
+      <path fill="#ce936a" d="M2 8h2v2H2zM12 8h2v2h-2z" />
+      <path fill="#365b55" d="M4 12h8v1h1v6H3v-6h1z" />
+      <path fill="#77947a" d="M4 12h8v2h-1v4H5v-4H4z" />
+      <path fill="#adc0a0" d="M5 12h6v1H5z" />
+      <path fill="#365b55" d="M2 13h2v5H2zM12 13h2v5h-2z" />
+      <path fill="#efb985" d="M2 18h2v2H2zM12 18h2v2h-2z" />
+      <path fill="#303345" d="M4 19h8v2H4z" />
+      <g class="avatar-foot avatar-foot-left">
+        <path fill="#303345" d="M4 21h3v2H4z" />
+        <path fill="#846b58" d="M3 23h4v1H3z" />
+      </g>
+      <g class="avatar-foot avatar-foot-right">
+        <path fill="#303345" d="M9 21h3v2H9z" />
+        <path fill="#846b58" d="M9 23h4v1H9z" />
+      </g>
+    </g>
+    <g data-avatar-facing="left">
+      <use href="#room-avatar-side" />
+    </g>
+    <g data-avatar-facing="right">
+      <use href="#room-avatar-side" transform="translate(16 0) scale(-1 1)" />
+    </g>
+  </svg>
+</div>
+
+<style>
+  [data-avatar-facing] {
+    display: none;
+  }
+  .room-avatar[data-direction='down'] [data-avatar-facing='down'],
+  .room-avatar[data-direction='up'] [data-avatar-facing='up'],
+  .room-avatar[data-direction='left'] [data-avatar-facing='left'],
+  .room-avatar[data-direction='right'] [data-avatar-facing='right'] {
+    display: inline;
+  }
+  .room-avatar[data-walking='true'] .avatar-foot-left {
+    animation: pixel-step 0.28s steps(2, end) infinite;
+  }
+  .room-avatar[data-walking='true'] .avatar-foot-right {
+    animation: pixel-step 0.28s steps(2, end) infinite reverse;
+  }
+  @keyframes pixel-step {
+    to {
+      transform: translateY(-1px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .avatar-foot {
+      animation: none !important;
+    }
+  }
+</style>

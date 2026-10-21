@@ -27,8 +27,8 @@
 仓库提供 Supabase Edge Function `submit-thought` 和 `docs/ai-inbox.openapi.json`。
 
 1. 在 Supabase Edge Functions 的 Secrets 中设置高熵的 `ROOM_INGEST_TOKEN`（至少 32 个字符）。它只用于这个草稿入口，不是数据库 Service Role Key。
-2. 部署：`supabase functions deploy submit-thought --project-ref YOUR_PROJECT`。`supabase/config.toml` 关闭该函数默认 JWT 校验，函数自身会校验独立的 Bearer token；缺少配置时返回 503，错误 token 返回 401。
-3. 把 OpenAPI 文件中的 `YOUR_PROJECT` 替换成真实项目引用。在支持自定义 HTTP 工具的客户端中配置这个接口，并通过其凭据设置保存该 token。不要把 token 写入聊天提示词或仓库。
+2. 部署：`supabase functions deploy submit-thought --project-ref ewujzsimqbojxvltzvav`。`supabase/config.toml` 关闭该函数默认 JWT 校验，函数自身会校验独立的 Bearer token；缺少配置时返回 503，错误 token 返回 401。
+3. OpenAPI 文件已指向项目 `ewujzsimqbojxvltzvav`。在支持自定义 HTTP 工具的客户端中配置这个接口，并通过其凭据设置保存该 token。不要把 token 写入聊天提示词或仓库。
 4. 每篇稿件带一个 UUID `request_id`；网络重试沿用同一个 UUID，避免重复投递。
 
 例如请求正文：

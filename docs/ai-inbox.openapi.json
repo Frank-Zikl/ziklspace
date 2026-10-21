@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "description": "仅投递草稿；用户确认后才可在网站中发布。"
   },
-  "servers": [{ "url": "https://YOUR_PROJECT.supabase.co/functions/v1" }],
+  "servers": [{ "url": "https://ewujzsimqbojxvltzvav.supabase.co/functions/v1" }],
   "paths": {
     "/submit-thought": {
       "post": {

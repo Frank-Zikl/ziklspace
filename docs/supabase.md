@@ -4,6 +4,10 @@
 
 ## 配置真实项目
 
+指定项目：`ewujzsimqbojxvltzvav`（https://ewujzsimqbojxvltzvav.supabase.co）。项目地址已填入 `.env.example` 和 AI 收件箱 OpenAPI 配置；这不代表迁移或云端部署已经完成。
+
+使用 CLI 时先运行 `supabase link --project-ref ewujzsimqbojxvltzvav`，确认目标后再执行迁移。
+
 1. 在自己的 Supabase 项目执行 `supabase/migrations/202610210001_personal_room.sql`。也可通过已授权的 Supabase 插件执行同一迁移，或使用 `supabase db push`。
 2. 在 Authentication 中邀请或创建房主邮箱用户，取得该用户 UUID，在 SQL Editor 执行：
 
@@ -14,7 +18,7 @@
    表中只允许一个房主。普通登录用户仍只有访客权限。建议关闭开放注册；前端发送登录邮件时也固定 `shouldCreateUser: false`。
 
 3. Authentication 的 Site URL 设置为正式域名，Redirect URLs 允许该站点根地址。开发测试地址按需单独添加。登录使用 PKCE 邮件链接，需要在发起登录的同一浏览器中打开。
-4. 复制 `.env.example` 为 `.env`，填写项目 URL 和 Publishable Key。Vercel 中添加同名的 `PUBLIC_SUPABASE_URL`、`PUBLIC_SUPABASE_PUBLISHABLE_KEY`，然后重新构建部署。两者是供浏览器使用的公开连接信息；Service Role / Secret Key 不得进入前端环境变量。
+4. 复制 `.env.example` 为 `.env`，保留已填写的项目 URL，并填写该项目的 Publishable Key。Vercel 中添加同名的 `PUBLIC_SUPABASE_URL`、`PUBLIC_SUPABASE_PUBLISHABLE_KEY`，然后重新构建部署。两者是供浏览器使用的公开连接信息；Service Role / Secret Key 不得进入前端环境变量。
 5. 登录后验证写字板保存、便签改写、收件箱草稿与发布。在未登录的窗口确认只能看到公开内容。
 
 `.vercelignore` 排除本地环境变量文件；Vercel 构建使用控制台中的变量。

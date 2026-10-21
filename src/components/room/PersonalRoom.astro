@@ -17,12 +17,12 @@ const readableBooks = await Promise.all(
   books.map(async (book) => ({ book, ...(await render(book)) })),
 );
 const objects = [
-  { id: 'whiteboard', label: '写字板', x: 43.6, y: 18.5, w: 19, h: 20 },
-  { id: 'stickies', label: '便签板', x: 64.5, y: 18, w: 14.3, h: 19 },
-  { id: 'books', label: '书架', x: 79.3, y: 28, w: 8.5, h: 40 },
-  { id: 'projects', label: '电脑', x: 48.6, y: 44, w: 11.5, h: 11 },
-  { id: 'notebook', label: '笔记本', x: 43, y: 50, w: 6, h: 5 },
-  { id: 'calendar', label: '日历', x: 66.4, y: 40, w: 7.5, h: 12 },
+  { id: 'whiteboard', label: '写字板', x: 75.2, y: 8, w: 13.5, h: 34 },
+  { id: 'stickies', label: '便签板', x: 90, y: 13, w: 8, h: 22.4 },
+  { id: 'books', label: '书架', x: 11.4, y: 5, w: 22.6, h: 40.8 },
+  { id: 'projects', label: '电脑', x: 58, y: 46.3, w: 13, h: 15 },
+  { id: 'notebook', label: '笔记本', x: 46.5, y: 59, w: 13.5, h: 6 },
+  { id: 'calendar', label: '日历', x: 89.9, y: 38.9, w: 5.8, h: 10.5 },
 ];
 ---
 
@@ -62,7 +62,7 @@ const objects = [
             class="room-hotspot hotspot-door"
             data-reenter
             aria-label="门口"
-            style="left:2.73%;top:25.63%;width:12.27%;height:55.63%"
+            style="left:0.5%;top:5.8%;width:7.5%;height:54.5%"
           >
             <span class="object-label">门口</span>
           </button>
@@ -71,7 +71,7 @@ const objects = [
             class="room-hotspot hotspot-account room-account"
             data-open="account"
             aria-label="房主登录"
-            style="left:43.82%;top:57.63%;width:4.82%;height:4.63%"
+            style="left:46.7%;top:66.1%;width:6.6%;height:5%"
           >
             <span class="account-dot" aria-hidden="true"></span>
             <span class="object-label" data-account-label>
@@ -85,7 +85,7 @@ const objects = [
             data-owner-only
             hidden
             aria-label="收件箱"
-            style="left:67.45%;top:61%;width:7%;height:7.5%"
+            style="left:83.2%;top:53.8%;width:11.7%;height:5.6%"
           >
             <span class="object-label">收件箱</span>
           </button>
@@ -95,6 +95,7 @@ const objects = [
             data-lamp
             aria-label="开关台灯"
             aria-pressed="false"
+            style="left:69%;top:33.6%;width:7%;height:9.2%"
           >
             <span class="object-label">台灯 ◐</span>
           </button>
@@ -103,6 +104,7 @@ const objects = [
             class="room-hotspot hotspot-cat"
             data-cat
             aria-label="摸摸猫"
+            style="left:7%;top:63.2%;width:10.7%;height:8.1%"
           >
             <span class="object-label">猫 · zZ</span>
           </button>
@@ -118,15 +120,13 @@ const objects = [
   </section>
   <div class="room-entry" data-entry hidden>
     <div class="entry-door-frame">
-      <div class="entry-warmth"></div>
       <button type="button" class="entry-door" data-enter aria-label="进入房间">
-        <span class="door-inset"></span>
-        <span class="door-name">Zikl</span>
-        <span class="door-handle"></span>
-        <span class="door-enter-label">进入 ↗</span>
+        <span class="entry-enter-mark" aria-hidden="true">
+          ↗
+        </span>
+        <span class="door-enter-label">进入</span>
       </button>
     </div>
-    <span class="entry-mat" aria-hidden="true"></span>
     <button type="button" class="entry-skip" data-skip-entry>
       跳过动画
     </button>

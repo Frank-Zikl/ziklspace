@@ -61,8 +61,28 @@ function initializeRoom(root: HTMLElement) {
       .querySelector('[data-close]')
       ?.addEventListener('click', () => dialog.close());
     dialog.addEventListener('close', () => {
-      if (!dialogs.some((panel) => panel.open) && returnFocus?.isConnected)
+      if (dialogs.some((panel) => panel.open)) return;
+      const active = document.activeElement;
+      // A native dialog may restore focus before dispatching its delayed close
+      // event. Respect any newer scene/entry focus instead of stealing it back.
+      if (
+        active instanceof HTMLElement &&
+        (scene.contains(active) || (!entry.hidden && entry.contains(active))) &&
+        active.getClientRects().length > 0 &&
+        !active.closest('[inert]')
+      ) {
+        return;
+      }
+      if (!entry.hidden) {
+        find<HTMLButtonElement>('[data-enter]').focus({ preventScroll: true });
+      } else if (
+        returnFocus?.isConnected &&
+        returnFocus.getClientRects().length
+      ) {
         returnFocus.focus({ preventScroll: true });
+      } else {
+        scene.focus({ preventScroll: true });
+      }
     });
     dialog.addEventListener('click', (event) => {
       if (event.target !== dialog) return;
@@ -84,7 +104,9 @@ function initializeRoom(root: HTMLElement) {
   const viewport = find<HTMLElement>('.room-viewport');
   const world = find<HTMLElement>('.room-world');
   let previousCameraRange = 0;
-  let cameraPosition = 0.5;
+  // The rain-night studio desk sits slightly to the right of the room's center.
+  // This is only the initial frame; scrolling and resizing retain the user's view.
+  let cameraPosition = 0.61;
   const frameRoom = () => {
     const range = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
     viewport.scrollTo({
@@ -166,7 +188,19 @@ function initializeRoom(root: HTMLElement) {
     });
   });
   let entering = false;
+  let entryTimer: number | undefined;
+  const finishEnteringRoom = () => {
+    window.clearTimeout(entryTimer);
+    entry.hidden = true;
+    surroundings.forEach((element) => {
+      element.inert = false;
+    });
+    scene.focus({ preventScroll: true });
+    entering = false;
+  };
   function showDoor() {
+    window.clearTimeout(entryTimer);
+    entering = false;
     entry.hidden = false;
     entry.classList.remove('entering');
     surroundings.forEach((element) => {
@@ -175,7 +209,10 @@ function initializeRoom(root: HTMLElement) {
     find<HTMLButtonElement>('[data-enter]').focus({ preventScroll: true });
   }
   function enterRoom(skip = false) {
-    if (entering) return;
+    if (entering) {
+      if (skip) finishEnteringRoom();
+      return;
+    }
     entering = true;
     try {
       sessionStorage.setItem('zikl-room-visited', '1');
@@ -183,17 +220,9 @@ function initializeRoom(root: HTMLElement) {
       /* Entry remains usable with storage disabled. */
     }
     entry.classList.add('entering');
-    const finish = () => {
-      entry.hidden = true;
-      surroundings.forEach((element) => {
-        element.inert = false;
-      });
-      scene.focus({ preventScroll: true });
-      entering = false;
-    };
     if (skip || matchMedia('(prefers-reduced-motion: reduce)').matches)
-      finish();
-    else window.setTimeout(finish, 800);
+      finishEnteringRoom();
+    else entryTimer = window.setTimeout(finishEnteringRoom, 800);
   }
   find('[data-enter]').addEventListener('click', () => enterRoom());
   find('[data-skip-entry]').addEventListener('click', () => enterRoom(true));
@@ -296,7 +325,7 @@ function initializeRoom(root: HTMLElement) {
     const whiteboard = entries.find((entry) => entry.kind === 'whiteboard');
     if (!boardDirty) boardInput.value = whiteboard?.body ?? '';
     find('[data-board-preview]').textContent =
-      whiteboard?.body.split('\n')[0].slice(0, 9) || '…';
+      whiteboard?.body.split('\n')[0].slice(0, 40) || '';
     const notes = entries.filter((entry) => entry.kind === 'sticky');
     const active = notes.filter((entry) => entry.paper_state !== 'torn');
     const torn = notes.filter((entry) => entry.paper_state === 'torn');

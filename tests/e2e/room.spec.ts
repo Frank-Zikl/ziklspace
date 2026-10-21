@@ -101,7 +101,7 @@ test('visitors read the board and notes without editing controls', async ({
   ).toBeHidden();
   await page.keyboard.press('Escape');
   await expect(boardOpener).toBeFocused();
-  await page.getByRole('button', { name: '便签板', exact: true }).click();
+  await page.getByRole('button', { name: '打开便签板', exact: true }).click();
   await expect(page.locator('.sticky-card').first()).toContainText(
     '公开的便签',
   );
@@ -113,7 +113,7 @@ test('selects a book, reads it and returns it to the shelf', async ({
 }) => {
   await mockRoom(page);
   await enterRoom(page);
-  await page.getByRole('button', { name: '书架', exact: true }).click();
+  await page.getByRole('button', { name: '打开书架', exact: true }).click();
   await page.locator('[data-read-book]').first().click();
   const reader = page.locator('[data-book-reader]').first();
   await expect(reader).toBeVisible();
@@ -127,7 +127,7 @@ test('uses desk and calendar objects to reach projects and notes', async ({
 }) => {
   await mockRoom(page);
   await enterRoom(page);
-  await page.getByRole('button', { name: '电脑', exact: true }).click();
+  await page.getByRole('button', { name: '打开电脑', exact: true }).click();
   await page.locator('.project-file').first().click();
   await expect(page).toHaveURL(/\/projects\/ziklspace\/$/);
   await expect(page.getByRole('link', { name: 'GitHub' })).toHaveAttribute(
@@ -135,14 +135,14 @@ test('uses desk and calendar objects to reach projects and notes', async ({
     'https://github.com/Frank-Zikl/ziklspace',
   );
   await enterRoom(page);
-  await page.getByRole('button', { name: '笔记本', exact: true }).click();
+  await page.getByRole('button', { name: '打开笔记本', exact: true }).click();
   await page
     .locator('[data-dialog="notebook"] a[href^="/notes/"]')
     .first()
     .click();
   await expect(page.locator('article h1')).not.toBeEmpty();
   await enterRoom(page);
-  await page.getByRole('button', { name: '日历', exact: true }).click();
+  await page.getByRole('button', { name: '打开日历', exact: true }).click();
   await expect(page.locator('.calendar-entry').first()).toContainText(
     'Ziklspace',
   );
@@ -170,14 +170,14 @@ test('owner saves the whiteboard and reads the server version after reload', asy
     'data-owner',
     'true',
   );
-  await page.getByRole('button', { name: '写字板', exact: true }).click();
+  await page.getByRole('button', { name: '打开写字板', exact: true }).click();
   const panel = page.getByRole('dialog', { name: '写字板', exact: true });
   await panel.getByRole('textbox').fill('今天想到一个新问题');
   await panel.getByRole('button', { name: '保存', exact: true }).click();
   await expect(panel.locator('[data-board-status]')).toHaveText('已保存');
   expect(rows[0].body).toBe('今天想到一个新问题');
   await page.reload();
-  await page.getByRole('button', { name: '写字板', exact: true }).click();
+  await page.getByRole('button', { name: '打开写字板', exact: true }).click();
   await expect(page.locator('[data-board-input]')).toHaveValue(
     '今天想到一个新问题',
   );
@@ -192,7 +192,7 @@ test('owner modifies, crosses out and rewrites a note while preserving old paper
     'data-owner',
     'true',
   );
-  await page.getByRole('button', { name: '便签板', exact: true }).click();
+  await page.getByRole('button', { name: '打开便签板', exact: true }).click();
   await page.getByRole('button', { name: '贴一张 +' }).click();
   await page.locator('[data-sticky-input]').fill('第一句话');
   await page.getByRole('button', { name: '贴上', exact: true }).click();
@@ -251,7 +251,7 @@ test('imports AI Markdown as a private draft, sanitizes it, and publishes only o
   await expect(reader.locator('[data-thought-meta]')).toHaveText('笔记 / GPT');
   expect(rows[0].status).toBe('published');
   await page.keyboard.press('Escape');
-  await page.getByRole('button', { name: '笔记本', exact: true }).click();
+  await page.getByRole('button', { name: '打开笔记本', exact: true }).click();
   await expect(page.locator('[data-thought-list]')).toContainText(
     '一次真实的感受',
   );
@@ -264,7 +264,7 @@ test('saving errors retain unsaved text', async ({ page }) => {
     'data-owner',
     'true',
   );
-  await page.getByRole('button', { name: '写字板', exact: true }).click();
+  await page.getByRole('button', { name: '打开写字板', exact: true }).click();
   await page.locator('[data-board-input]').fill('不能丢掉的文字');
   await page.getByRole('button', { name: '保存', exact: true }).click();
   await expect(page.locator('[data-board-status]')).toContainText('保存失败');
@@ -317,7 +317,7 @@ test('an older editor cannot overwrite a newer whiteboard save', async ({
     'data-owner',
     'true',
   );
-  await page.getByRole('button', { name: '写字板', exact: true }).click();
+  await page.getByRole('button', { name: '打开写字板', exact: true }).click();
   await page.locator('[data-board-input]').fill('当前窗口尚未保存的文字');
   rows[0].body = '另一窗口已经保存的文字';
   rows[0].updated_at = '2026-10-21T02:00:00.000Z';

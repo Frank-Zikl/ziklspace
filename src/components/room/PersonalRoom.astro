@@ -27,36 +27,22 @@ const objects = [
 ---
 
 <div class="personal-room" data-personal-room>
-  <header class="room-header">
-    <a href="/" class="room-wordmark">
-      <h1>
-        Zikl<span>’s room</span>
-      </h1>
-    </a>
-    <span class="room-edition">ROOM / 01</span>
-    <div class="room-header-actions">
-      <button type="button" class="room-zoom" data-zoom aria-pressed="false">
-        近看 +
-      </button>
-      <button type="button" data-reenter>
-        门口
-      </button>
-      <button type="button" data-open="account" class="room-account">
-        <span class="account-dot"></span>
-        <span data-account-label>房主登录</span>
-      </button>
-    </div>
-  </header>
+  <h1 class="sr-only">Zikl 的房间</h1>
   <section
     class="room-stage"
     aria-label="Zikl 的房间"
     tabindex="-1"
     data-room-stage
   >
-    <div class="room-viewport" tabindex="0" aria-label="房间全景，可左右滚动">
+    <div
+      class="room-viewport"
+      tabindex="0"
+      aria-label="房间全景"
+      aria-description="使用方向键或滑动探索房间，按 Tab 键选择物件。"
+    >
       <div class="room-world">
         <RoomScene />
-        <div class="room-hotspots" aria-label="房间物件">
+        <div class="room-hotspots" role="group" aria-label="房间物件">
           {objects.map(({ id, label, x, y, w, h }) => (
             <button
               type="button"
@@ -71,6 +57,38 @@ const objects = [
               </span>
             </button>
           ))}
+          <button
+            type="button"
+            class="room-hotspot hotspot-door"
+            data-reenter
+            aria-label="门口"
+            style="left:2.73%;top:25.63%;width:12.27%;height:55.63%"
+          >
+            <span class="object-label">门口</span>
+          </button>
+          <button
+            type="button"
+            class="room-hotspot hotspot-account room-account"
+            data-open="account"
+            aria-label="房主登录"
+            style="left:43.82%;top:57.63%;width:4.82%;height:4.63%"
+          >
+            <span class="account-dot" aria-hidden="true"></span>
+            <span class="object-label" data-account-label>
+              房主登录
+            </span>
+          </button>
+          <button
+            type="button"
+            class="room-hotspot hotspot-inbox"
+            data-open="inbox"
+            data-owner-only
+            hidden
+            aria-label="收件箱"
+            style="left:67.45%;top:61%;width:7%;height:7.5%"
+          >
+            <span class="object-label">收件箱</span>
+          </button>
           <button
             type="button"
             class="room-hotspot hotspot-lamp"
@@ -91,26 +109,14 @@ const objects = [
         </div>
       </div>
     </div>
+    <span
+      class="room-live"
+      role="status"
+      aria-live="polite"
+      data-room-status
+    ></span>
   </section>
-  <footer class="room-footer">
-    <span class="room-coordinate">
-      Z / 001 <span aria-hidden="true">✳</span>
-    </span>
-    <nav class="room-dock" aria-label="房间物件快捷入口">
-      {objects.map(({ id, label }) => (
-        <button type="button" data-open={id}>
-          {label}
-        </button>
-      ))}
-      <button type="button" data-open="inbox" data-owner-only hidden>
-        收件箱
-      </button>
-    </nav>
-    <span class="room-live" aria-live="polite" data-room-status></span>
-  </footer>
-
   <div class="room-entry" data-entry hidden>
-    <span class="entry-number">01 / ZIKLSPACE</span>
     <div class="entry-door-frame">
       <div class="entry-warmth"></div>
       <button type="button" class="entry-door" data-enter aria-label="进入房间">
@@ -120,9 +126,7 @@ const objects = [
         <span class="door-enter-label">进入 ↗</span>
       </button>
     </div>
-    <span class="entry-mat" aria-hidden="true">
-      HOME
-    </span>
+    <span class="entry-mat" aria-hidden="true"></span>
     <button type="button" class="entry-skip" data-skip-entry>
       跳过动画
     </button>

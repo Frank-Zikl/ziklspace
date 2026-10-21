@@ -80,9 +80,61 @@ function initializeRoom(root: HTMLElement) {
   // The door only remembers a visit, never writing permission or content.
   const entry = find('[data-entry]');
   const scene = find('[data-room-stage]');
-  const surroundings = all<HTMLElement>(
-    '.room-header, .room-stage, .room-footer',
+  const surroundings = [scene];
+  const viewport = find<HTMLElement>('.room-viewport');
+  const world = find<HTMLElement>('.room-world');
+  let previousCameraRange = 0;
+  let cameraPosition = 0.5;
+  const frameRoom = () => {
+    const range = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+    viewport.scrollTo({
+      left: range * cameraPosition,
+      top: 0,
+      behavior: 'auto',
+    });
+    previousCameraRange = range;
+  };
+  const cameraObserver = new ResizeObserver(frameRoom);
+  cameraObserver.observe(viewport);
+  cameraObserver.observe(world);
+  viewport.addEventListener(
+    'scroll',
+    () => {
+      const range = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+      if (range > 0 && range === previousCameraRange) {
+        cameraPosition = Math.max(0, Math.min(1, viewport.scrollLeft / range));
+      }
+      // The cover camera is vertically composed in CSS; focusing a cropped object
+      // must never scroll the hidden vertical axis and reveal the scene edges.
+      if (viewport.scrollTop !== 0) viewport.scrollTop = 0;
+    },
+    { passive: true },
   );
+  viewport.addEventListener('focusin', (event) => {
+    const object = (event.target as HTMLElement).closest<HTMLElement>(
+      '.room-hotspot',
+    );
+    viewport.scrollTop = 0;
+    // Keep pointer targets stationary between pressing and releasing a click.
+    // Keyboard focus may reveal objects reached by Tab on a panned mobile scene.
+    if (!object?.matches(':focus-visible')) return;
+    const view = viewport.getBoundingClientRect();
+    const target = object.getBoundingClientRect();
+    const inset = 12;
+    if (target.left >= view.left + inset && target.right <= view.right - inset)
+      return;
+    const range = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+    const left =
+      viewport.scrollLeft +
+      target.left -
+      view.left -
+      (view.width - target.width) / 2;
+    viewport.scrollTo({
+      left: Math.max(0, Math.min(range, left)),
+      top: 0,
+      behavior: 'auto',
+    });
+  });
   let entering = false;
   function showDoor() {
     entry.hidden = false;
@@ -116,17 +168,6 @@ function initializeRoom(root: HTMLElement) {
   find('[data-enter]').addEventListener('click', () => enterRoom());
   find('[data-skip-entry]').addEventListener('click', () => enterRoom(true));
   find('[data-reenter]').addEventListener('click', showDoor);
-  find<HTMLButtonElement>('[data-zoom]').addEventListener('click', (event) => {
-    const button = event.currentTarget as HTMLButtonElement;
-    const zoomed = root.dataset.zoomed !== 'true';
-    root.dataset.zoomed = String(zoomed);
-    button.setAttribute('aria-pressed', String(zoomed));
-    button.textContent = zoomed ? '全景 −' : '近看 +';
-    const viewport = find('.room-viewport');
-    viewport.scrollLeft = zoomed
-      ? (viewport.scrollWidth - viewport.clientWidth) / 2
-      : 0;
-  });
   entry.setAttribute('role', 'dialog');
   entry.setAttribute('aria-modal', 'true');
   entry.setAttribute('aria-label', '房间入口');
@@ -212,7 +253,9 @@ function initializeRoom(root: HTMLElement) {
     });
     boardInput.readOnly = !value;
     boardStatus.textContent = value ? '云端保存 · 访客可读' : '访客只读';
-    find('[data-account-label]').textContent = value ? '房主' : '房主登录';
+    const accountLabel = value ? '房主' : '房主登录';
+    find('[data-account-label]').textContent = accountLabel;
+    find('[data-open="account"]').setAttribute('aria-label', accountLabel);
     if (!value) stickyForm.hidden = true;
   }
   function applyEntry(entry: RoomEntry) {

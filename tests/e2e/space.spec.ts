@@ -57,32 +57,145 @@ test('does not publish draft MDX notes, projects, books or updates', async ({
   }
 });
 
-test('supports narrow screens and reduced motion', async ({ page }) => {
-  await mockRoom(page);
+test('fills the viewport and keeps room objects reachable with reduced motion', async ({
+  page,
+}, testInfo) => {
+  await mockRoom(page, { owner: true });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await enterRoom(page);
-  for (const width of [320, 390, 768, 1024]) {
-    await page.setViewportSize({ width, height: 900 });
-    if (width <= 800) {
-      const viewport = page.locator('.room-viewport');
-      expect(
-        await viewport.evaluate(
-          (element) => element.scrollWidth <= element.clientWidth,
-        ),
-      ).toBe(true);
-      await page.getByRole('button', { name: '近看 +' }).click();
-      expect(
-        await viewport.evaluate(
-          (element) =>
-            element.scrollWidth > element.clientWidth && element.scrollLeft > 0,
-        ),
-      ).toBe(true);
-      await page.getByRole('button', { name: '全景 −' }).click();
-      expect(
-        await viewport.evaluate(
-          (element) => element.scrollWidth <= element.clientWidth,
-        ),
-      ).toBe(true);
+  await expect(page.locator('[data-personal-room]')).toHaveAttribute(
+    'data-owner',
+    'true',
+  );
+  await expect(page.getByRole('banner')).toHaveCount(0);
+  await expect(page.getByRole('contentinfo')).toHaveCount(0);
+  await expect(
+    page.getByRole('navigation', { name: '房间物件快捷入口' }),
+  ).toHaveCount(0);
+  for (const { width, height } of [
+    { width: 320, height: 900 },
+    { width: 390, height: 844 },
+    { width: 768, height: 900 },
+    { width: 1024, height: 768 },
+    { width: 1920, height: 1080 },
+    { width: 2560, height: 1080 },
+  ]) {
+    await page.setViewportSize({ width, height });
+    await page.reload();
+    await expect(page.locator('[data-personal-room]')).toHaveAttribute(
+      'data-owner',
+      'true',
+    );
+    await expect(page.locator('[data-entry]')).toBeHidden();
+    await page.mouse.move(0, 0);
+    await page.locator('[data-room-stage]').focus();
+    const geometry = await page
+      .locator('[data-room-stage]')
+      .evaluate((stage) => {
+        const bounds = stage.getBoundingClientRect();
+        const art = stage.querySelector('.room-art')!.getBoundingClientRect();
+        return {
+          stage: {
+            left: bounds.left,
+            top: bounds.top,
+            width: bounds.width,
+            height: bounds.height,
+          },
+          art: {
+            left: art.left,
+            top: art.top,
+            right: art.right,
+            bottom: art.bottom,
+          },
+          pageWidth: document.documentElement.scrollWidth,
+          pageHeight: document.documentElement.scrollHeight,
+        };
+      });
+    expect(
+      Math.abs(geometry.stage.left),
+      `${width}: scene starts at left edge`,
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(geometry.stage.top),
+      `${width}: scene starts at top edge`,
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(geometry.stage.width - width),
+      `${width}: scene fills screen width`,
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(geometry.stage.height - height),
+      `${width}: scene fills screen height`,
+    ).toBeLessThanOrEqual(1);
+    expect(
+      geometry.art.left,
+      `${width}: artwork covers left edge`,
+    ).toBeLessThanOrEqual(1);
+    expect(
+      geometry.art.top,
+      `${width}: artwork covers top edge`,
+    ).toBeLessThanOrEqual(1);
+    expect(
+      geometry.art.right,
+      `${width}: artwork covers right edge`,
+    ).toBeGreaterThanOrEqual(width - 1);
+    expect(
+      geometry.art.bottom,
+      `${width}: artwork covers bottom edge`,
+    ).toBeGreaterThanOrEqual(height - 1);
+    expect(
+      geometry.pageWidth,
+      `${width}: no horizontal page scroll`,
+    ).toBeLessThanOrEqual(width + 1);
+    expect(
+      geometry.pageHeight,
+      `${width}: no vertical page scroll`,
+    ).toBeLessThanOrEqual(height + 1);
+    await page.screenshot({
+      path: `artifacts/immersive-room-${width}x${height}-${testInfo.project.name}.png`,
+      fullPage: true,
+    });
+    for (const name of ['写字板', '便签板', '书架', '电脑', '笔记本', '日历']) {
+      const opener = page.getByRole('button', {
+        name: `打开${name}`,
+        exact: true,
+      });
+      await opener.scrollIntoViewIfNeeded();
+      await expect(opener).toBeInViewport({ ratio: 0.75 });
+      await opener.click();
+      await expect(
+        page.getByRole('dialog', { name, exact: true }),
+      ).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(opener).toBeFocused();
+    }
+    const key = page.locator('.room-hotspot[data-open="account"]');
+    await key.focus();
+    await expect(key).toBeInViewport({ ratio: 0.75 });
+    await page.keyboard.press('Enter');
+    await expect(
+      page.getByRole('dialog', { name: '房主', exact: true }),
+    ).toBeVisible();
+    await page.keyboard.press('Escape');
+    const inbox = page.locator('.room-hotspot[data-open="inbox"]');
+    await inbox.scrollIntoViewIfNeeded();
+    await inbox.click();
+    await expect(
+      page.getByRole('dialog', { name: '收件箱', exact: true }),
+    ).toBeVisible();
+    await page.keyboard.press('Escape');
+    if (width <= 390) {
+      for (const hotspot of await page.locator('.room-hotspot:visible').all()) {
+        const bounds = await hotspot.boundingBox();
+        expect(
+          bounds?.width,
+          `${width}: usable touch target width`,
+        ).toBeGreaterThanOrEqual(44);
+        expect(
+          bounds?.height,
+          `${width}: usable touch target height`,
+        ).toBeGreaterThanOrEqual(44);
+      }
     }
     expect(
       await page.evaluate(
@@ -90,11 +203,6 @@ test('supports narrow screens and reduced motion', async ({ page }) => {
       ),
       `width ${width}`,
     ).toBe(true);
-    await page.getByRole('button', { name: '书架', exact: true }).click();
-    await expect(
-      page.getByRole('dialog', { name: '书架', exact: true }),
-    ).toBeVisible();
-    await page.keyboard.press('Escape');
   }
   expect(
     await page

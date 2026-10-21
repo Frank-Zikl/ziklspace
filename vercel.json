@@ -3,5 +3,9 @@
   "framework": "astro",
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "env": {
+    "PUBLIC_SUPABASE_URL": "https://ewujzsimqbojxvltzvav.supabase.co",
+    "PUBLIC_SUPABASE_PUBLISHABLE_KEY": "sb_publishable_J6Y4fSIIj8_EkVJSCmKRXQ_G39T53AY"
+  }
 }

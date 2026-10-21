@@ -21,7 +21,9 @@
 4. 复制 `.env.example` 为 `.env`，保留已填写的项目 URL，并填写该项目的 Publishable Key。Vercel 中添加同名的 `PUBLIC_SUPABASE_URL`、`PUBLIC_SUPABASE_PUBLISHABLE_KEY`，然后重新构建部署。两者是供浏览器使用的公开连接信息；Service Role / Secret Key 不得进入前端环境变量。
 5. 登录后验证写字板保存、便签改写、收件箱草稿与发布。在未登录的窗口确认只能看到公开内容。
 
-`.vercelignore` 排除本地环境变量文件；Vercel 构建使用控制台中的变量。
+当前项目的公开 URL 和 Publishable Key 已配置在 `vercel.json` 的 `env` 中，供 Vercel 构建使用。Publishable Key 会进入浏览器，不是管理员凭据；数据保护依赖上述 RLS 和房主登记。更换项目或轮换公开密钥时，应同步修改此配置。
+
+`.vercelignore` 排除本地环境变量文件；本地开发使用未提交的 `.env`。
 
 ## 数据规则
 

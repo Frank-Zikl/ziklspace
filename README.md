@@ -4,7 +4,7 @@ Zikl 的个人空间。Astro、TypeScript 和 MDX，输出静态站点。
 
 ## 开发
 
-Node.js 22.22+，`.nvmrc` 固定当前验证过的 24.19.0。
+Node.js 24，`.nvmrc` 固定当前验证过的 24.19.0。
 
 ```sh
 npm ci
@@ -139,6 +139,22 @@ SITE_URL=https://你的域名 npm run build
 ```
 
 未配置域名时不生成绝对地址。GitHub Actions 已配置格式、类型检查和浏览器测试；远端执行结果需在推送后确认。
+
+### Vercel
+
+在 Vercel 导入 `Frank-Zikl/ziklspace`，根目录保持仓库根目录，生产分支选择 `main`。仓库中的 `vercel.json` 已设置 Astro、`npm ci`、`npm run build` 和 `dist`；`package.json` 固定使用 Node.js 24。静态站点不需要数据库或应用密钥。
+
+首次导入时，在自己的浏览器中完成 Vercel 登录及 GitHub 仓库授权，然后点击 Deploy。连接成功后，推送到 `main` 会自动触发生产部署。
+
+获得稳定的生产域名后，在 Vercel 的 Production 环境变量中设置 `SITE_URL=https://你的域名`，重新部署即可生成对应的 canonical 和分享地址。不要把某次预览部署的临时域名填入生产配置。
+
+本机已登录 Vercel CLI 时，也可以在仓库根目录运行：
+
+```sh
+npx vercel --prod
+```
+
+首次运行按提示选择自己的账户和项目。`.vercel/` 中的关联信息不会提交；构建产物、测试报告、本地环境变量文件不会通过 CLI 上传。
 
 ## 设计约定
 

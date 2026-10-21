@@ -1,0 +1,12 @@
+.git/
+.github/
+node_modules/
+.astro/
+.vercel/
+dist/
+artifacts/
+playwright-report/
+test-results/
+.env
+.env.*
+*.log

@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import PageHeading from '../../components/PageHeading.astro';
 import Icon from '../../components/Icon.astro';
+import CloudThoughtList from '../../components/room/CloudThoughtList.astro';
 import { loadNotes, formatDate } from '../../lib/content';
 const notes = await loadNotes();
 ---
@@ -9,9 +10,7 @@ const notes = await loadNotes();
 <Layout title="笔记">
   <section class="content-shell">
     <PageHeading title="笔记" />
-    <div class="collection-label">
-      <span>{notes.length} 篇笔记</span>
-    </div>
+    <CloudThoughtList />
     <div class="notes-index">
       {notes.map((note) => (
         <a class="note-preview" href={`/notes/${note.id}/`}>
@@ -34,6 +33,5 @@ const notes = await loadNotes();
         </a>
       ))}
     </div>
-    {notes.length === 0 && <span class="empty-label">暂无笔记</span>}
   </section>
 </Layout>

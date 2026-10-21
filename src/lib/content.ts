@@ -30,6 +30,13 @@ export function formatDate(date: string) {
   return date.replaceAll('-', '.');
 }
 
+export async function loadBooks() {
+  const books = await getCollection('books', ({ data }) => !data.draft);
+  return books.sort(
+    (a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id),
+  );
+}
+
 export const projectStatusLabels = {
   active: '开发中',
   paused: '暂停',

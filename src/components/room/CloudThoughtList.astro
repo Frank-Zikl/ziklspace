@@ -1,0 +1,48 @@
+<div class="notes-index cloud-thought-list" data-cloud-thoughts hidden></div>
+<p class="empty-label" data-cloud-thought-status role="status"></p>
+<script>
+  import { roomClient, loadPublishedThoughts } from '../../lib/room-api';
+  const list = document.querySelector<HTMLElement>('[data-cloud-thoughts]');
+  if (list && roomClient) {
+    loadPublishedThoughts()
+      .then((entries) => {
+        list.replaceChildren(
+          ...entries.map((entry) => {
+            const link = document.createElement('a');
+            link.className = 'note-preview';
+            link.href = `/?thought=${encodeURIComponent(entry.id)}`;
+            const meta = document.createElement('div');
+            meta.className = 'note-preview-meta';
+            const kind = document.createElement('span');
+            kind.textContent = '思考';
+            const date = document.createElement('span');
+            date.className = 'mono';
+            date.textContent = entry.created_at
+              .slice(0, 10)
+              .replaceAll('-', '.');
+            meta.append(kind, date);
+            const title = document.createElement('h2');
+            title.textContent = entry.title;
+            const bottom = document.createElement('div');
+            bottom.className = 'note-preview-bottom';
+            bottom.textContent = '阅读 ↗';
+            link.append(meta, title, bottom);
+            return link;
+          }),
+        );
+        list.hidden = entries.length === 0;
+      })
+      .catch(() => {
+        const status = document.querySelector('[data-cloud-thought-status]');
+        if (status) status.textContent = '云端笔记暂时无法读取';
+      });
+  }
+</script>
+<style>
+  .cloud-thought-list[hidden] {
+    display: none;
+  }
+  .cloud-thought-list:not([hidden]) {
+    margin-bottom: 28px;
+  }
+</style>

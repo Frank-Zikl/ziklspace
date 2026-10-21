@@ -13,16 +13,21 @@
     "check": "astro check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "npm run test:e2e",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "node --test tests/unit/*.test.ts",
     "test:e2e": "node scripts/test-build.mjs && playwright test",
     "test:report": "playwright show-report"
   },
   "dependencies": {
     "@astrojs/mdx": "8.1.0",
-    "astro": "7.4.1"
+    "@supabase/supabase-js": "^2.118.0",
+    "astro": "7.4.1",
+    "dompurify": "^3.4.17",
+    "marked": "^18.1.1"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.11",
+    "@electric-sql/pglite": "^0.5.10",
     "@playwright/test": "1.64.1",
     "@types/node": "24.19.2",
     "prettier": "3.9.10",

@@ -43,4 +43,15 @@ const updates = defineCollection({
   }),
 });
 
-export const collections = { notes, projects, updates };
+const books = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/books' }),
+  schema: z.object({
+    title: z.string().trim().min(1),
+    author: z.string().default(''),
+    sample: z.boolean().default(false),
+    draft: z.boolean().default(false),
+    order: z.number().int().default(0),
+  }),
+});
+
+export const collections = { notes, projects, updates, books };

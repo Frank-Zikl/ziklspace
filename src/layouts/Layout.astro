@@ -7,12 +7,18 @@ interface Props {
   title?: string;
   description?: string;
   canvas?: boolean;
+  room?: boolean;
 }
-const { title, description = site.description, canvas = false } = Astro.props;
+const {
+  title,
+  description = site.description,
+  canvas = false,
+  room = false,
+} = Astro.props;
 const pathname = Astro.url.pathname;
 const canonical = Astro.site ? new URL(pathname, Astro.site) : undefined;
 const navigation = [
-  { href: '/', label: '工作台' },
+  { href: '/', label: '房间' },
   { href: '/notes/', label: '笔记' },
   { href: '/projects/', label: '项目' },
   { href: '/about/', label: '关于' },
@@ -37,13 +43,13 @@ const navigation = [
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title ? `${title} · ${site.title}` : site.title}</title>
   </head>
-  <body class:list={{ 'canvas-page': canvas }}>
+  <body class:list={{ 'canvas-page': canvas, 'room-page': room }}>
     <a class="skip-link" href="#main">
       跳到主要内容
     </a>
     {!canvas && (
       <header class="site-header shell">
-        <a class="brand" href="/" aria-label="Ziklspace 工作台">
+        <a class="brand" href="/" aria-label="Ziklspace 房间">
           <Icon name="star" size={29} />
           <span>
             zikl<span class="brand-serif">space</span>

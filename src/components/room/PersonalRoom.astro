@@ -1,0 +1,492 @@
+---
+import { render } from 'astro:content';
+import RoomScene from './RoomScene.astro';
+import {
+  loadBooks,
+  loadNotes,
+  loadProjects,
+  loadUpdates,
+} from '../../lib/content';
+const [books, notes, projects, updates] = await Promise.all([
+  loadBooks(),
+  loadNotes(),
+  loadProjects(),
+  loadUpdates(),
+]);
+const readableBooks = await Promise.all(
+  books.map(async (book) => ({ book, ...(await render(book)) })),
+);
+const objects = [
+  { id: 'whiteboard', label: '写字板', x: 43.6, y: 18.5, w: 19, h: 20 },
+  { id: 'stickies', label: '便签板', x: 64.5, y: 18, w: 14.3, h: 19 },
+  { id: 'books', label: '书架', x: 79.3, y: 28, w: 8.5, h: 40 },
+  { id: 'projects', label: '电脑', x: 48.6, y: 44, w: 11.5, h: 11 },
+  { id: 'notebook', label: '笔记本', x: 43, y: 50, w: 6, h: 5 },
+  { id: 'calendar', label: '日历', x: 66.4, y: 40, w: 7.5, h: 12 },
+];
+---
+
+<div class="personal-room" data-personal-room>
+  <header class="room-header">
+    <a href="/" class="room-wordmark">
+      <h1>
+        Zikl<span>’s room</span>
+      </h1>
+    </a>
+    <span class="room-edition">ROOM / 01</span>
+    <div class="room-header-actions">
+      <button type="button" class="room-zoom" data-zoom aria-pressed="false">
+        近看 +
+      </button>
+      <button type="button" data-reenter>
+        门口
+      </button>
+      <button type="button" data-open="account" class="room-account">
+        <span class="account-dot"></span>
+        <span data-account-label>房主登录</span>
+      </button>
+    </div>
+  </header>
+  <section
+    class="room-stage"
+    aria-label="Zikl 的房间"
+    tabindex="-1"
+    data-room-stage
+  >
+    <div class="room-viewport" tabindex="0" aria-label="房间全景，可左右滚动">
+      <div class="room-world">
+        <RoomScene />
+        <div class="room-hotspots" aria-label="房间物件">
+          {objects.map(({ id, label, x, y, w, h }) => (
+            <button
+              type="button"
+              data-open={id}
+              class={`room-hotspot hotspot-${id}`}
+              aria-label={`打开${label}`}
+              style={`left:${x}%;top:${y}%;width:${w}%;height:${h}%`}
+            >
+              <span class="object-label">
+                {label}
+                <span aria-hidden="true"> ↗</span>
+              </span>
+            </button>
+          ))}
+          <button
+            type="button"
+            class="room-hotspot hotspot-lamp"
+            data-lamp
+            aria-label="开关台灯"
+            aria-pressed="false"
+          >
+            <span class="object-label">台灯 ◐</span>
+          </button>
+          <button
+            type="button"
+            class="room-hotspot hotspot-cat"
+            data-cat
+            aria-label="摸摸猫"
+          >
+            <span class="object-label">猫 · zZ</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="room-footer">
+    <span class="room-coordinate">
+      Z / 001 <span aria-hidden="true">✳</span>
+    </span>
+    <nav class="room-dock" aria-label="房间物件快捷入口">
+      {objects.map(({ id, label }) => (
+        <button type="button" data-open={id}>
+          {label}
+        </button>
+      ))}
+      <button type="button" data-open="inbox" data-owner-only hidden>
+        收件箱
+      </button>
+    </nav>
+    <span class="room-live" aria-live="polite" data-room-status></span>
+  </footer>
+
+  <div class="room-entry" data-entry hidden>
+    <span class="entry-number">01 / ZIKLSPACE</span>
+    <div class="entry-door-frame">
+      <div class="entry-warmth"></div>
+      <button type="button" class="entry-door" data-enter aria-label="进入房间">
+        <span class="door-inset"></span>
+        <span class="door-name">Zikl</span>
+        <span class="door-handle"></span>
+        <span class="door-enter-label">进入 ↗</span>
+      </button>
+    </div>
+    <span class="entry-mat" aria-hidden="true">
+      HOME
+    </span>
+    <button type="button" class="entry-skip" data-skip-entry>
+      跳过动画
+    </button>
+  </div>
+
+  <dialog
+    class="room-dialog slate-dialog"
+    data-dialog="whiteboard"
+    aria-labelledby="whiteboard-title"
+  >
+    <header class="dialog-heading">
+      <div>
+        <span class="object-number">01 / WALL</span>
+        <h2 id="whiteboard-title">写字板</h2>
+      </div>
+      <button type="button" data-close aria-label="关闭写字板">
+        ×
+      </button>
+    </header>
+    <form data-board-form>
+      <label for="room-whiteboard" class="sr-only">
+        写字板内容
+      </label>
+      <textarea
+        id="room-whiteboard"
+        class="slate-input"
+        maxlength="3000"
+        placeholder=""
+        readonly
+        data-board-input
+      ></textarea>
+      <div class="object-toolbar">
+        <span data-board-status aria-live="polite">
+          访客只读
+        </span>
+        <button type="submit" class="room-primary" data-owner-only hidden>
+          保存
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog
+    class="room-dialog cork-dialog"
+    data-dialog="stickies"
+    aria-labelledby="stickies-title"
+  >
+    <header class="dialog-heading">
+      <div>
+        <span class="object-number">02 / WALL</span>
+        <h2 id="stickies-title">便签板</h2>
+      </div>
+      <button type="button" data-close aria-label="关闭便签板">
+        ×
+      </button>
+    </header>
+    <div class="object-toolbar">
+      <span data-sticky-count>0 张</span>
+      <button
+        type="button"
+        class="room-primary"
+        data-new-sticky
+        data-owner-only
+        hidden
+      >
+        贴一张 +
+      </button>
+    </div>
+    <form class="sticky-editor" data-sticky-form hidden>
+      <label for="sticky-text" data-sticky-editor-label>
+        新便签
+      </label>
+      <textarea
+        id="sticky-text"
+        maxlength="600"
+        required
+        data-sticky-input
+      ></textarea>
+      <div class="object-toolbar">
+        <button type="button" data-cancel-sticky>
+          取消
+        </button>
+        <button type="submit" class="room-primary">
+          贴上
+        </button>
+      </div>
+    </form>
+    <p class="form-status" role="status" data-sticky-status></p>
+    <div class="sticky-grid" data-sticky-list></div>
+    <details class="paper-bin">
+      <summary data-bin-label>纸篓 · 0</summary>
+      <div class="sticky-grid" data-torn-list></div>
+    </details>
+  </dialog>
+
+  <dialog
+    class="room-dialog library-dialog"
+    data-dialog="books"
+    aria-labelledby="books-title"
+  >
+    <header class="dialog-heading">
+      <div>
+        <span class="object-number">03 / SHELF</span>
+        <h2 id="books-title">书架</h2>
+      </div>
+      <button type="button" data-close aria-label="关闭书架">
+        ×
+      </button>
+    </header>
+    <div class="book-selection" data-book-selection>
+      {books.map((book, index) => (
+        <button
+          type="button"
+          class="shelf-book"
+          data-read-book={book.id}
+          style={`--book-color:${['#648477', '#b77b63', '#a48b58'][index % 3]}`}
+        >
+          <span class="book-cover-title">{book.data.title}</span>
+          <span class="book-cover-mark">Z</span>
+          <span class="book-cover-author">{book.data.author}</span>
+          {book.data.sample && <span class="book-sample">样稿</span>}
+        </button>
+      ))}
+      {books.length === 0 && <p class="room-empty">书架暂空</p>}
+    </div>
+    {readableBooks.map(({ book, Content }) => (
+      <article class="book-reader" data-book-reader={book.id} hidden>
+        <button type="button" class="room-back" data-back-books>
+          ← 放回书架
+        </button>
+        <h3>{book.data.title}</h3>
+        <span class="reader-byline">{book.data.author}</span>
+        <div class="prose">
+          <Content />
+        </div>
+      </article>
+    ))}
+  </dialog>
+
+  <dialog
+    class="room-dialog computer-dialog"
+    data-dialog="projects"
+    aria-labelledby="projects-title"
+  >
+    <header class="dialog-heading">
+      <div>
+        <span class="object-number">04 / DESK</span>
+        <h2 id="projects-title">电脑</h2>
+      </div>
+      <button type="button" data-close aria-label="关闭电脑">
+        ×
+      </button>
+    </header>
+    <div class="computer-screen">
+      <span class="computer-prompt">zikl@room ~/projects</span>
+      {projects.map((project) => (
+        <a class="project-file" href={`/projects/${project.id}/`}>
+          <span aria-hidden="true">▱</span>
+          <span>{project.data.title}</span>
+          <span>↗</span>
+        </a>
+      ))}
+    </div>
+    <a class="room-back" href="/projects/">
+      全部项目 ↗
+    </a>
+  </dialog>
+
+  <dialog
+    class="room-dialog notebook-dialog"
+    data-dialog="notebook"
+    aria-labelledby="notebook-title"
+  >
+    <header class="dialog-heading">
+      <div>
+        <span class="object-number">05 / DESK</span>
+        <h2 id="notebook-title">笔记本</h2>
+      </div>
+      <button type="button" data-close aria-label="关闭笔记本">
+        ×
+      </button>
+    </header>
+    <div class="room-reading-list" data-thought-list></div>
+    <div class="room-reading-list">
+      {notes.map((note) => (
+        <a href={`/notes/${note.id}/`}>
+          <span>{note.data.title}</span>
+          <small>{note.data.sample ? '样稿' : note.data.date} ↗</small>
+        </a>
+      ))}
+    </div>
+    <a class="room-back" href="/notes/">
+      全部笔记 ↗
+    </a>
+  </dialog>
+
+  <dialog
+    class="room-dialog"
+    data-dialog="calendar"
+    aria-labelledby="calendar-title"
+  >
+    <header class="dialog-heading">
+      <div>
+        <span class="object-number">06 / WALL</span>
+        <h2 id="calendar-title">日历</h2>
+      </div>
+      <button type="button" data-close aria-label="关闭日历">
+        ×
+      </button>
+    </header>
+    {updates.map((update) => (
+      <article class="calendar-entry">
+        <time datetime={update.data.date}>{update.data.date}</time>
+        <h3>{update.data.title}</h3>
+        <ul>
+          {update.data.items.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </article>
+    ))}
+    <a class="room-back" href="/now/">
+      全部近况 ↗
+    </a>
+  </dialog>
+
+  <dialog
+    class="room-dialog"
+    data-dialog="account"
+    aria-labelledby="account-title"
+  >
+    <header class="dialog-heading">
+      <div>
+        <span class="object-number">KEY / 01</span>
+        <h2 id="account-title">房主</h2>
+      </div>
+      <button type="button" data-close aria-label="关闭登录">
+        ×
+      </button>
+    </header>
+    <p class="account-status" data-auth-status role="status">
+      正在检查连接…
+    </p>
+    <form class="room-form" data-login-form hidden>
+      <label for="owner-email">邮箱</label>
+      <input
+        id="owner-email"
+        type="email"
+        autocomplete="email"
+        required
+        data-login-email
+      />
+      <button class="room-primary" type="submit">
+        发送登录链接
+      </button>
+    </form>
+    <button type="button" class="room-primary" data-signout hidden>
+      退出登录
+    </button>
+  </dialog>
+
+  <dialog class="room-dialog" data-dialog="inbox" aria-labelledby="inbox-title">
+    <header class="dialog-heading">
+      <div>
+        <span class="object-number">INBOX / PRIVATE</span>
+        <h2 id="inbox-title">收件箱</h2>
+      </div>
+      <button type="button" data-close aria-label="关闭收件箱">
+        ×
+      </button>
+    </header>
+    <div data-owner-only hidden>
+      <button type="button" class="room-primary" data-new-thought>
+        整理一篇 +
+      </button>
+      <div class="room-reading-list" data-draft-list></div>
+    </div>
+    <p class="form-status" data-inbox-status role="status"></p>
+  </dialog>
+
+  <dialog
+    class="room-dialog"
+    data-dialog="thought-editor"
+    aria-labelledby="thought-editor-title"
+  >
+    <header class="dialog-heading">
+      <div>
+        <span class="object-number">DRAFT / PRIVATE</span>
+        <h2 id="thought-editor-title">整理思考</h2>
+      </div>
+      <button type="button" data-close aria-label="关闭思考编辑器">
+        ×
+      </button>
+    </header>
+    <form class="room-form" data-thought-form>
+      <label for="thought-title">标题</label>
+      <input id="thought-title" maxlength="200" required data-thought-title />
+      <label for="thought-source">来源</label>
+      <select id="thought-source" data-thought-source>
+        <option value="manual">自己写的</option>
+        <option value="gpt">GPT 对话</option>
+        <option value="gemini">Gemini 对话</option>
+        <option value="other">其他</option>
+      </select>
+      <label for="thought-body">正文 · Markdown</label>
+      <textarea
+        id="thought-body"
+        maxlength="30000"
+        required
+        rows="12"
+        data-thought-body
+      ></textarea>
+      <label class="markdown-import">
+        导入 Markdown
+        <input
+          type="file"
+          accept=".md,.markdown,text/markdown,text/plain"
+          data-import-markdown
+        />
+      </label>
+      <button type="submit" class="room-primary">
+        保存草稿
+      </button>
+      <p class="form-status" data-thought-status role="status"></p>
+    </form>
+  </dialog>
+
+  <dialog
+    class="room-dialog reading-dialog"
+    data-dialog="thought"
+    aria-labelledby="thought-title-display"
+  >
+    <header class="dialog-heading">
+      <div>
+        <span class="object-number" data-thought-meta></span>
+        <h2 id="thought-title-display" data-thought-title-display></h2>
+      </div>
+      <button type="button" data-close aria-label="合上思考">
+        ×
+      </button>
+    </header>
+    <article class="prose" data-thought-content></article>
+    <a class="room-back" data-thought-permalink hidden>
+      独立链接 ↗
+    </a>
+    <div class="object-toolbar" data-owner-only hidden>
+      <button type="button" data-edit-thought>
+        修改
+      </button>
+      <button type="button" class="room-primary" data-publish-thought>
+        发布到笔记本
+      </button>
+    </div>
+    <p class="form-status" data-reader-status role="status"></p>
+  </dialog>
+  <noscript>
+    <nav class="room-noscript">
+      <a href="/notes/">笔记</a>
+      <a href="/projects/">项目</a>
+      <a href="/books/">书架</a>
+      <a href="/now/">近况</a>
+    </nav>
+  </noscript>
+</div>
+<script>
+  import '../../scripts/room';
+</script>

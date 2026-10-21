@@ -1,29 +1,9 @@
 ---
-import '../styles/canvas.css';
-import '../styles/materials.css';
 import Layout from '../layouts/Layout.astro';
-import CanvasIntro from '../components/CanvasIntro.astro';
-import Workbench from '../components/Workbench.astro';
-import CanvasIndex from '../components/CanvasIndex.astro';
-import CanvasFooter from '../components/CanvasFooter.astro';
-import { loadNotes, loadProjects, loadUpdates } from '../lib/content';
-const [notes, projects, updates] = await Promise.all([
-  loadNotes(),
-  loadProjects(),
-  loadUpdates(),
-]);
-const project =
-  projects.find((project) => project.data.featured) ?? projects[0];
+import PersonalRoom from '../components/room/PersonalRoom.astro';
+import '../styles/room.css';
 ---
 
-<Layout canvas>
-  <div class="canvas-frame">
-    <CanvasIntro />
-    <Workbench note={notes[0]} update={updates[0]} project={project} />
-    <CanvasIndex notes={notes} />
-    <CanvasFooter />
-    <span class="canvas-margin-mark mono" aria-hidden="true">
-      ZIKLSPACE
-    </span>
-  </div>
+<Layout canvas room>
+  <PersonalRoom />
 </Layout>

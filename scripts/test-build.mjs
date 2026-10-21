@@ -6,8 +6,13 @@ const fixtures = [
   ['draft-note.mdx', 'notes/e2e-private-note.mdx'],
   ['draft-project.mdx', 'projects/e2e-private-project.mdx'],
   ['draft-update.mdx', 'updates/e2e-private-update.mdx'],
+  ['draft-book.mdx', 'books/e2e-private-book.mdx'],
 ];
 const created = [];
+
+// Browser tests intercept this project; never contact a real Supabase project.
+process.env.PUBLIC_SUPABASE_URL = 'https://room-test.supabase.co';
+process.env.PUBLIC_SUPABASE_PUBLISHABLE_KEY = 'test-publishable-key';
 
 // Exclusive writes preserve any existing user content, even after an interrupted run.
 try {

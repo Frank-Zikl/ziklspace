@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import { loadBooks } from '../../lib/content';
+const books = await loadBooks();
+---
+
+<Layout title="书架">
+  <section class="reading-shell">
+    <PageHeading title="书架" />
+    {books.map((book) => (
+      <p>
+        <a href={`/books/${book.id}/`}>{book.data.title} ↗</a>
+        {book.data.sample && <span class="sample-marker">样稿</span>}
+      </p>
+    ))}
+    <a class="back-link" href="/">
+      ← 回到房间
+    </a>
+  </section>
+</Layout>

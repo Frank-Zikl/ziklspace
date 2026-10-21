@@ -1,0 +1,32 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { loadBooks } from '../../lib/content';
+export async function getStaticPaths() {
+  return (await loadBooks()).map((book) => ({
+    params: { id: book.id },
+    props: { book },
+  }));
+}
+interface Props {
+  book: CollectionEntry<'books'>;
+}
+const { book } = Astro.props;
+const { Content } = await render(book);
+---
+
+<Layout title={book.data.title}>
+  <article class="reading-shell">
+    <a class="back-link" href="/books/">
+      ← 放回书架
+    </a>
+    <header class="article-heading">
+      <span>{book.data.author}</span>
+      {book.data.sample && <span class="sample-marker">样稿</span>}
+      <h1>{book.data.title}</h1>
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</Layout>

@@ -1,0 +1,62 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Zikl 私有思考收件箱",
+    "version": "1.0.0",
+    "description": "仅投递草稿；用户确认后才可在网站中发布。"
+  },
+  "servers": [{ "url": "https://YOUR_PROJECT.supabase.co/functions/v1" }],
+  "paths": {
+    "/submit-thought": {
+      "post": {
+        "operationId": "submitThoughtDraft",
+        "summary": "把用户确认的整理稿放入私有收件箱",
+        "security": [{ "inboxToken": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["request_id", "title", "body", "source"],
+                "properties": {
+                  "request_id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "每篇稿件一个 UUID，重试沿用原值。"
+                  },
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "body": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 30000,
+                    "description": "Markdown；不得把 AI 推测写成用户的感受。"
+                  },
+                  "source": {
+                    "type": "string",
+                    "enum": ["gpt", "gemini", "other"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "草稿已保存，尚未公开。" },
+          "200": { "description": "该请求已投递，无需重复保存。" },
+          "400": { "description": "内容格式或长度不合要求。" },
+          "401": { "description": "未通过收件箱凭据校验。" },
+          "503": { "description": "收件箱尚未配置。" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": { "inboxToken": { "type": "http", "scheme": "bearer" } }
+  }
+}

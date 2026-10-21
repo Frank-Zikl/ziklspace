@@ -1,0 +1,5 @@
+project_id = "ziklspace"
+
+[functions.submit-thought]
+# This endpoint validates a separate, write-only inbox token in handler.ts.
+verify_jwt = false

@@ -122,12 +122,18 @@ function initializeRoom(root: HTMLElement) {
     const rangeY = Math.max(0, viewport.scrollHeight - viewport.clientHeight);
     if (!cameraReady) {
       cameraX = rangeX
-        ? clamp(world.offsetWidth * 0.5 - viewport.clientWidth / 2, rangeX) /
-          rangeX
+        ? clamp(
+            world.offsetLeft +
+              world.offsetWidth * 0.5 -
+              viewport.clientWidth / 2,
+            rangeX,
+          ) / rangeX
         : 0.5;
       cameraY = rangeY
         ? clamp(
-            world.offsetHeight * (440 / 640) - viewport.clientHeight * 0.78,
+            world.offsetTop +
+              world.offsetHeight * (440 / 640) -
+              viewport.clientHeight * 0.78,
             rangeY,
           ) / rangeY
         : 0;
@@ -158,8 +164,8 @@ function initializeRoom(root: HTMLElement) {
   );
   function followCharacter(point: RoomPoint, moving: boolean) {
     if (!moving) return;
-    const x = (point.x / sceneWidth) * world.offsetWidth;
-    const y = (point.y / sceneHeight) * world.offsetHeight;
+    const x = world.offsetLeft + (point.x / sceneWidth) * world.offsetWidth;
+    const y = world.offsetTop + (point.y / sceneHeight) * world.offsetHeight;
     let left = viewport.scrollLeft;
     let top = viewport.scrollTop;
     if (x < left + viewport.clientWidth * 0.22)
@@ -284,6 +290,7 @@ function initializeRoom(root: HTMLElement) {
   );
   viewport.addEventListener('click', (event) => {
     if (
+      !(event.target as HTMLElement).closest('.room-world') ||
       (event.target as HTMLElement).closest('.room-hotspot') ||
       !entry.hidden ||
       dialogs.some((dialog) => dialog.open)

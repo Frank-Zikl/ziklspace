@@ -57,7 +57,7 @@ test('does not publish draft MDX notes, projects, books or updates', async ({
   }
 });
 
-test('fills the viewport and keeps room objects reachable with reduced motion', async ({
+test('shows the complete compact room and keeps objects reachable with reduced motion', async ({
   page,
 }, testInfo) => {
   await mockRoom(page, { owner: true });
@@ -127,22 +127,43 @@ test('fills the viewport and keeps room objects reachable with reduced motion', 
       Math.abs(geometry.stage.height - height),
       `${width}: scene fills screen height`,
     ).toBeLessThanOrEqual(1);
+    const artworkHeight = geometry.art.bottom - geometry.art.top;
     expect(
-      geometry.art.left,
-      `${width}: artwork covers left edge`,
-    ).toBeLessThanOrEqual(1);
+      artworkHeight,
+      `${width}: room is smaller than the screen`,
+    ).toBeLessThan(height * 0.92);
+    expect(
+      artworkHeight,
+      `${width}: room remains comfortably readable`,
+    ).toBeGreaterThan(height * 0.8);
     expect(
       geometry.art.top,
-      `${width}: artwork covers top edge`,
-    ).toBeLessThanOrEqual(1);
-    expect(
-      geometry.art.right,
-      `${width}: artwork covers right edge`,
-    ).toBeGreaterThanOrEqual(width - 1);
+      `${width}: north wall is fully visible`,
+    ).toBeGreaterThanOrEqual(0);
     expect(
       geometry.art.bottom,
-      `${width}: artwork covers bottom edge`,
-    ).toBeGreaterThanOrEqual(height - 1);
+      `${width}: lower floor is fully visible`,
+    ).toBeLessThanOrEqual(height + 1);
+    expect(
+      Math.abs(geometry.art.top - (height - artworkHeight) / 2),
+      `${width}: room is vertically centered`,
+    ).toBeLessThanOrEqual(1);
+    const artworkWidth = geometry.art.right - geometry.art.left;
+    if (artworkWidth <= width) {
+      expect(
+        Math.abs(geometry.art.left - (width - artworkWidth) / 2),
+        `${width}: complete room is horizontally centered`,
+      ).toBeLessThanOrEqual(1);
+    } else {
+      expect(
+        geometry.art.left,
+        `${width}: portrait room reaches left edge`,
+      ).toBeLessThanOrEqual(1);
+      expect(
+        geometry.art.right,
+        `${width}: portrait room reaches right edge`,
+      ).toBeGreaterThanOrEqual(width - 1);
+    }
     expect(
       geometry.pageWidth,
       `${width}: no horizontal page scroll`,

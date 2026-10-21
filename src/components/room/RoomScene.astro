@@ -13,8 +13,8 @@
       patternUnits="userSpaceOnUse"
     >
       <rect width="64" height="64" fill="#eadbb9" />
-      <path d="M12 20h4v4h-4Zm32 28h4v4h-4Z" fill="#e4d3ad" />
-      <path d="M36 8h8v4h-8Z" fill="#f0e3c5" />
+      <path d="M12 20h2v2h-2Zm32 28h2v2h-2Z" fill="#e4d3ad" />
+      <path d="M36 8h8v1h-8Zm2 2h3v1h-3Z" fill="#f0e3c5" />
     </pattern>
     <pattern
       id="pixel-floor"
@@ -23,14 +23,17 @@
       patternUnits="userSpaceOnUse"
     >
       <rect width="192" height="64" fill="#ad754c" />
-      <path d="M0 0h192v4H0Zm0 32h192v4H0Z" fill="#855438" />
-      <path d="M0 4h192v4H0Zm0 36h192v4H0Z" fill="#c28b58" />
-      <path d="M60 4h4v28h-4Zm124 32h4v32h-4Z" fill="#8c5b3c" />
+      <path d="M0 0h192v2H0Zm0 32h192v2H0Z" fill="#8a593b" />
+      <path d="M0 2h192v1H0Zm0 34h192v1H0Z" fill="#c28b58" />
+      <path d="M62 3h2v29h-2Zm124 31h2v33h-2Z" fill="#8c5b3c" />
       <path
-        d="M16 16h28v4H16Zm84-4h44v4h-44Zm-20 36h40v4H80Zm60 8h24v4h-24Z"
+        d="M16 16h28v1H16Zm28-2h10v1H44Zm56-2h44v1h-44Zm-20 36h40v1H80Zm40 2h10v1h-10Zm20 6h24v1h-24Z"
         fill="#b98051"
       />
-      <path d="M24 20h12v4H24Zm92-4h16v4h-16Zm-24 36h16v4H92Z" fill="#9c663f" />
+      <path
+        d="M24 20h12v1H24Zm12-2h7v1h-7Zm80-2h16v1h-16Zm-24 36h16v1H92Z"
+        fill="#9c663f"
+      />
     </pattern>
     <pattern
       id="pixel-rug"
@@ -39,8 +42,28 @@
       patternUnits="userSpaceOnUse"
     >
       <rect width="32" height="32" fill="#c7bb8a" />
-      <path d="M0 0h16v4H0Zm16 16h16v4H16Z" fill="#d9cea4" />
-      <path d="M0 4h4v4H0Zm16 16h4v4h-4Z" fill="#b2a579" />
+      <path d="M0 0h16v1H0Zm16 16h16v1H16Z" fill="#d9cea4" />
+      <path d="M0 4h1v2H0Zm16 16h1v2h-1Zm8 8h3v1h-3Z" fill="#b2a579" />
+    </pattern>
+    <pattern
+      id="pixel-cream-weave"
+      width="8"
+      height="8"
+      patternUnits="userSpaceOnUse"
+    >
+      <rect width="8" height="8" fill="#f0e4bf" />
+      <path d="M1 2h2v1H1Zm4 4h2v1H5Z" fill="#e4d8b1" />
+      <path d="M2 3h1v2H2Zm4 4h1v1H6Z" fill="#f6eccf" />
+    </pattern>
+    <pattern
+      id="pixel-sage-weave"
+      width="8"
+      height="8"
+      patternUnits="userSpaceOnUse"
+    >
+      <rect width="8" height="8" fill="#d0d2a0" />
+      <path d="M0 2h3v1H0Zm4 6h3v1H4Z" fill="#c2c797" />
+      <path d="M2 1h1v2H2Zm6 5h1v2H6Z" fill="#d9dbad" />
     </pattern>
   </defs>
 
@@ -66,6 +89,28 @@
   <path d="M272 32h8v176h-8Zm488 0h8v208h-8Z" fill="#d3bd93" />
   <path d="M280 32h4v176h-4Zm488 0h4v176h-4Z" fill="#f0e1bd" />
 
+  <g class="pixel-fine-trim">
+    <path d="M0 0h960v2H0Zm0 12h2v612H0Zm958-12h2v640h-2Z" fill="#3e322b" />
+    <path d="M2 2h954v2H2Zm0 10h2v612H2Zm954-8h2v632h-2Z" fill="#654b36" />
+    <path d="M4 6h950v2H4Zm0 8h2v608H4Zm950-14h2v632h-2Z" fill="#8c6443" />
+    <path
+      d="M16 14h928v1H16Zm6 8h914v1H22Zm0 2h1v590h-1Zm914-1h1v592h-1Z"
+      fill="#b58b58"
+    />
+    <path
+      d="M24 210h912v1H24Zm0 26h912v1H24Zm0 6h912v1H24ZM26 618h908v1H26ZM16 626h928v1H16Z"
+      fill="#d3a873"
+    />
+    <path
+      d="M34 214h1v16h-1Zm62 0h1v16h-1Zm64 0h1v16h-1Zm128 0h1v16h-1Zm64 0h1v16h-1Zm64 0h1v16h-1Zm64 0h1v16h-1Zm64 0h1v16h-1Zm64 0h1v16h-1Zm64 0h1v16h-1Zm64 0h1v16h-1Zm64 0h1v16h-1Zm64 0h1v16h-1Z"
+      fill="#ac875a"
+    />
+    <path
+      d="M50 220h14v1H50Zm240 5h18v1h-18Zm420-5h20v1h-20Zm160 6h16v1h-16Z"
+      fill="#cca777"
+    />
+  </g>
+
   <!-- Dusk outside: hard-edged colour bands, pine silhouettes and pixel stars. -->
   <g class="room-window">
     <rect x="44" y="36" width="224" height="100" fill="#b89868" />
@@ -84,6 +129,21 @@
     />
     <path d="M204 52h12v4h4v16h-4v4h-12v-4h-4V56h4Z" fill="#f2e5ba" />
     <path d="M212 52h8v16h-8v-4h-4v-8h4Z" fill="#263c58" />
+    <g class="pixel-window-detail">
+      <path
+        d="M74 66h28v2H74Zm6-2h18v2H80Zm4-2h8v2h-8Zm52 16h24v2h-24Zm6-2h16v2h-16Zm70 14h30v2h-30Zm8-2h18v2h-18Z"
+        fill="#557184"
+      />
+      <path
+        d="M56 108h4v-4h2v-6h2v-4h2v8h4v4h4v4h8v2H56Zm90-2h4v-6h2v-8h2v10h4v6h6v2h-18Zm36-2h4v-8h2v-8h2v10h4v8h6v2h-18Zm50 8h4v-8h2v-6h2v10h4v4h6v2h-18Z"
+        fill="#3e5b60"
+      />
+      <path
+        d="M62 60h1v1h-1Zm26-6h2v2h-2Zm52 8h1v2h-1Zm40-10h2v1h-2Zm54 4h1v1h-1Zm-70 36h1v1h-1Z"
+        fill="#b8ccd0"
+      />
+      <path d="M202 58h1v10h-1Zm2-4h3v1h-3Zm2 18h7v1h-7Z" fill="#fff1c5" />
+    </g>
     <path d="M104 44h8v76h-8Zm80 0h8v76h-8Z" fill="#b59162" />
     <path d="M104 44h4v76h-4Zm80 0h4v76h-4ZM52 84h200v4H52Z" fill="#ead0a0" />
     <rect x="40" y="124" width="224" height="8" fill="#e5c28b" />
@@ -91,6 +151,19 @@
     <rect x="44" y="140" width="216" height="4" fill="#b79a70" />
     <path d="M44 40h8v80h-8Zm200 0h8v80h-8Z" fill="#7c8660" />
     <path d="M44 40h4v80h-4Zm204 0h4v80h-4Z" fill="#a6ad7b" />
+    <path
+      d="M42 34h220v1H42Zm4 3h212v1H46Zm-2 89h216v1H44ZM106 46h1v72h-1Zm80 0h1v72h-1ZM54 85h196v1H54Z"
+      fill="#f3d5a1"
+    />
+    <path
+      d="M48 44h1v72h-1Zm200 0h1v72h-1ZM112 46h1v72h-1Zm80 0h1v72h-1Z"
+      fill="#6c7759"
+    />
+    <path
+      d="M50 46h1v28h-1Zm200 16h1v42h-1ZM76 130h34v1H76Zm90 1h42v1h-42Z"
+      fill="#c9c690"
+    />
+    <path d="M54 136h38v1H54Zm80 1h48v1h-48Zm80-1h26v1h-26Z" fill="#aa8258" />
   </g>
 
   <!-- The door and a small wall-mounted key board are the room controls. -->
@@ -111,6 +184,26 @@
     <rect x="72" y="280" width="80" height="8" fill="#d1b27b" />
     <path d="M80 288h64v4h8v8H72v-8h8Z" fill="#6d7050" />
     <rect x="84" y="292" width="56" height="4" fill="#a5a475" />
+    <g class="pixel-door-detail">
+      <path
+        d="M66 130h92v1H66Zm0 1h1v153h-1Zm89 2h1v148h-1ZM70 282h82v1H70Z"
+        fill="#d0ad72"
+      />
+      <path
+        d="M82 146h1v126h-1Zm4 4h1v46h-1Zm58 2h1v120h-1ZM90 158h44v1H90Zm0 62h44v1H90Z"
+        fill="#8d9a6d"
+      />
+      <path
+        d="M94 165h1v20h-1Zm34 4h1v24h-1Zm-31 62h1v18h-1Zm31 6h1v20h-1Z"
+        fill="#6b7c56"
+      />
+      <path d="M138 210h4v1h-4Zm4 3h5v1h-5Zm-4 10h2v1h-2Z" fill="#ffdfa0" />
+      <path d="M138 219h2v2h-2Zm0-11h1v1h-1Z" fill="#7e704a" />
+      <path
+        d="M76 286h72v1H76Zm6 7h4v1h-4Zm8 0h4v1h-4Zm8 0h4v1h-4Zm8 0h4v1h-4Zm8 0h4v1h-4Zm8 0h4v1h-4Zm8 0h4v1h-4Z"
+        fill="#c9c592"
+      />
+    </g>
   </g>
   <g class="room-key">
     <rect x="212" y="188" width="56" height="56" fill="#b19467" />
@@ -122,6 +215,15 @@
     <rect x="236" y="196" width="8" height="8" fill="#f0d58b" />
     <rect x="240" y="200" width="4" height="4" fill="#b39861" />
     <path d="M240 204h4v24h-4Zm4 12h8v4h-8Zm0 8h4v4h-4Z" fill="#efd28a" />
+    <path
+      d="M210 186h52v1h-52Zm0 1h1v50h-1Zm4 4h44v1h-44ZM218 228h10v1h-10Zm24-34h10v1h-10Z"
+      fill="#efd09a"
+    />
+    <path
+      d="M220 194h2v1h-2Zm29 1h1v1h-1ZM238 198h4v1h-4Zm3 10h1v17h-1Zm4 9h5v1h-5Z"
+      fill="#fff0b5"
+    />
+    <path d="M235 197h1v8h-1Zm3 10h4v1h-4Zm4 16h3v1h-3Z" fill="#957643" />
   </g>
 
   <!-- Empty working surfaces receive real content from the HTML overlay. -->
@@ -137,6 +239,22 @@
     <rect x="344" y="180" width="152" height="4" fill="#dbb77b" />
     <rect x="464" y="176" width="20" height="4" fill="#eee1bc" />
     <rect x="448" y="176" width="8" height="4" fill="#b88c6a" />
+    <path
+      d="M346 90h148v1H346Zm0 1h1v88h-1Zm5 3h139v1H351ZM352 173h138v1H352Z"
+      fill="#ecc98b"
+    />
+    <path
+      d="M352 95h24v1h-24Zm38-1h38v1h-38Zm55 1h30v1h-30ZM352 168h140v1H352Z"
+      fill="#b48d57"
+    />
+    <path
+      d="M358 102h124v1H358Zm0 2h1v60h-1ZM362 164h116v1H362Z"
+      fill="#3c574a"
+    />
+    <path
+      d="M466 176h16v1h-16Zm-16 1h4v1h-4ZM346 182h150v1H346Z"
+      fill="#f8e9bf"
+    />
   </g>
   <g class="room-noticeboard">
     <rect x="540" y="100" width="112" height="80" fill="#c2a372" />
@@ -162,6 +280,21 @@
     <rect x="568" y="144" width="28" height="4" fill="#d3dba9" />
     <rect x="580" y="144" width="4" height="4" fill="#b97454" />
     <path d="M572 152h16v4h-16Z" fill="#91a374" />
+    <path d="M538 98h108v1H538Zm0 1h1v74h-1Zm4 2h102v1H542Z" fill="#dfba83" />
+    <path
+      d="M550 110h32v1h-32Zm0 1h1v23h-1Zm48 3h28v1h-28Zm-32 32h32v1h-32Z"
+      fill="#fae7b8"
+    />
+    <rect x="554" y="118" width="24" height="14" fill="#edd696" />
+    <path d="M555 120h20v1h-20Zm0 4h17v1h-17Zm0 4h12v1h-12Z" fill="#ad9869" />
+    <rect x="602" y="120" width="22" height="12" fill="#d9ad92" />
+    <path d="M603 123h17v1h-17Zm0 4h12v1h-12Z" fill="#aa8a70" />
+    <rect x="570" y="150" width="24" height="11" fill="#becb95" />
+    <path d="M571 152h19v1h-19Zm0 4h13v1h-13Z" fill="#899f70" />
+    <path
+      d="M565 109h1v1h-1Zm44 4h1v1h-1Zm-28 32h1v1h-1ZM546 106h2v1h-2Zm88 56h1v2h-1Z"
+      fill="#f5dc9e"
+    />
   </g>
 
   <g class="room-calendar">
@@ -176,6 +309,21 @@
     />
     <rect x="728" y="176" width="12" height="12" fill="#c89665" />
     <rect x="732" y="180" width="4" height="4" fill="#f5e9c6" />
+    <rect x="704" y="164" width="40" height="44" fill="#f1e6c7" />
+    <path
+      d="M704 164h40v1h-40Zm0 11h40v1h-40Zm0 11h40v1h-40Zm0 11h40v1h-40ZM716 164h1v42h-1Zm13 0h1v42h-1Z"
+      fill="#dfd6b4"
+    />
+    <path
+      d="M708 168h2v3h-2Zm12 0h3v2h-3Zm13 0h2v3h-2Zm-25 11h3v2h-3Zm12 0h2v3h-2Zm-12 11h2v3h-2Zm12 0h3v2h-3Z"
+      fill="#999d78"
+    />
+    <path d="M731 177h9v9h-9Z" fill="#c59564" />
+    <path
+      d="M733 179h2v3h-2Zm3 0h2v2h-2ZM698 146h52v1h-52ZM746 210h2v2h-2Z"
+      fill="#f7edce"
+    />
+    <path d="M705 143h1v7h-1Zm32 0h1v7h-1Z" fill="#a6a888" />
   </g>
 
   <!-- Recessed shelves: cloth spines, page edges and four-pixel joinery. -->
@@ -223,6 +371,121 @@
     <rect x="808" y="268" width="64" height="12" fill="#d7c89d" />
     <path d="M812 268h56v4h-56Zm0 8h56v4h-56Z" fill="#f0e3b9" />
     <rect x="816" y="260" width="52" height="8" fill="#728063" />
+    <g class="pixel-book-detail">
+      <path
+        d="M801 137h10v1h-10Zm1 1h1v40h-1Zm8 0h1v40h-1Z"
+        fill="#e8d8ad"
+        opacity=".55"
+      />
+      <path
+        d="M805 144h5v2h-5Zm0 4h3v1h-3Zm0 22h5v1h-5Z"
+        fill="#e9ddba"
+        opacity=".7"
+      />
+      <path
+        d="M817 129h14v1h-14Zm1 1h1v48h-1Zm12 0h1v48h-1Z"
+        fill="#e8d8ad"
+        opacity=".55"
+      />
+      <path
+        d="M821 136h9v2h-9Zm0 4h7v1h-7Zm0 30h9v1h-9Z"
+        fill="#e9ddba"
+        opacity=".7"
+      />
+      <path
+        d="M837 141h10v1h-10Zm1 1h1v36h-1Zm8 0h1v36h-1Z"
+        fill="#e8d8ad"
+        opacity=".55"
+      />
+      <path
+        d="M841 148h5v2h-5Zm0 4h3v1h-3Zm0 18h5v1h-5Z"
+        fill="#e9ddba"
+        opacity=".7"
+      />
+      <path
+        d="M853 133h14v1h-14Zm1 1h1v44h-1Zm12 0h1v44h-1Z"
+        fill="#e8d8ad"
+        opacity=".55"
+      />
+      <path
+        d="M857 140h9v2h-9Zm0 4h7v1h-7Zm0 26h9v1h-9Z"
+        fill="#e9ddba"
+        opacity=".7"
+      />
+      <path
+        d="M873 149h10v1h-10Zm1 1h1v28h-1Zm8 0h1v28h-1Z"
+        fill="#e8d8ad"
+        opacity=".55"
+      />
+      <path
+        d="M877 156h5v2h-5Zm0 4h3v1h-3Zm0 10h5v1h-5Z"
+        fill="#e9ddba"
+        opacity=".7"
+      />
+      <path
+        d="M801 205h14v1h-14Zm1 1h1v36h-1Zm12 0h1v36h-1Z"
+        fill="#e8d8ad"
+        opacity=".55"
+      />
+      <path
+        d="M805 212h9v2h-9Zm0 4h7v1h-7Zm0 18h9v1h-9Z"
+        fill="#e9ddba"
+        opacity=".7"
+      />
+      <path
+        d="M821 197h10v1h-10Zm1 1h1v44h-1Zm8 0h1v44h-1Z"
+        fill="#e8d8ad"
+        opacity=".55"
+      />
+      <path
+        d="M825 204h5v2h-5Zm0 4h3v1h-3Zm0 26h5v1h-5Z"
+        fill="#e9ddba"
+        opacity=".7"
+      />
+      <path
+        d="M837 213h14v1h-14Zm1 1h1v28h-1Zm12 0h1v28h-1Z"
+        fill="#e8d8ad"
+        opacity=".55"
+      />
+      <path
+        d="M841 220h9v2h-9Zm0 4h7v1h-7Zm0 10h9v1h-9Z"
+        fill="#e9ddba"
+        opacity=".7"
+      />
+      <path
+        d="M857 201h10v1h-10Zm1 1h1v40h-1Zm8 0h1v40h-1Z"
+        fill="#e8d8ad"
+        opacity=".55"
+      />
+      <path
+        d="M861 208h5v2h-5Zm0 4h3v1h-3Zm0 22h5v1h-5Z"
+        fill="#e9ddba"
+        opacity=".7"
+      />
+      <path
+        d="M873 209h10v1h-10Zm1 1h1v32h-1Zm8 0h1v32h-1Z"
+        fill="#e8d8ad"
+        opacity=".55"
+      />
+      <path
+        d="M877 216h5v2h-5Zm0 4h3v1h-3Zm0 14h5v1h-5Z"
+        fill="#e9ddba"
+        opacity=".7"
+      />
+      <path
+        d="M790 114h108v1H790Zm0 2h1v174h-1Zm108 1h1v174h-1ZM790 182h108v1H790Zm0 64h108v1H790Zm0 48h108v1H790Z"
+        fill="#e7bf85"
+      />
+      <path
+        d="M907 122h1v72h-1Zm0 96h1v68h-1ZM793 116h1v24h-1Zm0 42h1v16h-1Z"
+        fill="#a77b4f"
+      />
+      <path
+        d="M810 271h60v1h-60Zm1 3h57v1h-57Zm-1 3h59v1h-59Zm0 5h64v1h-64Zm2 3h61v1h-61Zm1 3h58v1h-58Z"
+        fill="#e7d8ac"
+      />
+      <path d="M818 261h48v1h-48Zm2 3h44v1h-44Z" fill="#aab18a" />
+    </g>
   </g>
 
   <!-- The desktop and its legs match the navigation obstacle footprint exactly. -->
@@ -246,6 +509,15 @@
     <rect x="420" y="300" width="48" height="16" fill="#bc8c55" />
     <rect x="424" y="300" width="40" height="4" fill="#d0a36a" />
     <rect x="436" y="308" width="16" height="4" fill="#725637" />
+    <path
+      d="M394 246h252v1H394Zm2 2h1v38h-1ZM394 289h252v1H394Zm2 12h18v1h-18Z"
+      fill="#ecc991"
+    />
+    <path
+      d="M404 257h28v1h-28Zm24 2h30v1h-30Zm34 9h34v1h-34Zm128-12h32v1h-32Zm-18 4h22v1h-22ZM422 302h44v1h-44Zm4 10h8v1h-8Zm22 0h14v1h-14Z"
+      fill="#bc8f5d"
+    />
+    <path d="M438 308h12v1h-12Zm-36-2h1v14h-1Zm234 0h1v14h-1Z" fill="#e1b379" />
   </g>
 
   <g class="room-computer">
@@ -268,6 +540,24 @@
     />
     <rect x="580" y="268" width="8" height="12" fill="#657759" />
     <rect x="580" y="268" width="8" height="4" fill="#9faf84" />
+    <path
+      d="M482 202h76v1h-76Zm0 1h1v54h-1Zm72 2h1v49h-1ZM486 254h68v1h-68Z"
+      fill="#d1d2a8"
+    />
+    <rect x="488" y="208" width="64" height="40" fill="#253e40" />
+    <rect x="490" y="210" width="60" height="5" fill="#3c5b53" />
+    <path d="M493 212h2v1h-2Zm4 0h2v1h-2Zm4 0h2v1h-2Z" fill="#b2c297" />
+    <path
+      d="M496 220h9v1h-9Zm12 0h18v1h-18Zm-12 4h5v1h-5Zm8 0h23v1h-23Zm-8 4h12v1h-12Zm16 0h17v1h-17Zm-16 4h7v1h-7Zm10 0h19v1h-19Zm-10 4h14v1h-14Zm17 0h23v1h-23Z"
+      fill="#95b78e"
+    />
+    <path d="M496 240h6v1h-6Zm9 0h2v5h-2Z" fill="#d5dba9" />
+    <rect x="492" y="276" width="72" height="7" fill="#b5bc96" />
+    <path
+      d="M495 277h4v1h-4Zm6 0h4v1h-4Zm6 0h4v1h-4Zm6 0h4v1h-4Zm6 0h4v1h-4Zm6 0h4v1h-4Zm6 0h4v1h-4Zm6 0h4v1h-4Zm6 0h4v1h-4Zm6 0h4v1h-4Zm6 0h4v1h-4Zm-58 3h4v1h-4Zm6 0h4v1h-4Zm6 0h4v1h-4Zm6 0h4v1h-4Zm6 0h4v1h-4Zm6 0h4v1h-4Zm6 0h4v1h-4Zm6 0h4v1h-4Zm6 0h4v1h-4Zm6 0h4v1h-4Z"
+      fill="#7d9278"
+    />
+    <path d="M516 262h8v1h-8Zm-12 7h32v1h-32Zm78 1h2v6h-2Z" fill="#dce0b7" />
   </g>
   <g class="room-notebook">
     <rect x="412" y="268" width="44" height="32" fill="#ae8656" />
@@ -279,6 +569,17 @@
       fill="#c3bc91"
     />
     <rect x="440" y="288" width="4" height="8" fill="#b87d5b" />
+    <path
+      d="M410 266h1v27h-1Zm3 0h13v1h-13Zm20 0h13v1h-13ZM430 266h1v24h-1Z"
+      fill="#f8ebc6"
+    />
+    <rect x="414" y="270" width="12" height="17" fill="#e3d7ae" />
+    <rect x="434" y="270" width="12" height="17" fill="#e3d7ae" />
+    <path
+      d="M415 271h10v1h-10Zm0 4h8v1h-8Zm0 4h10v1h-10Zm20-8h9v1h-9Zm0 4h10v1h-10Zm0 4h7v1h-7Z"
+      fill="#b7b18a"
+    />
+    <path d="M441 288h1v7h-1Z" fill="#e5b17a" />
   </g>
   <g class="room-lamp">
     <g class="lamp-glow" opacity=".32">
@@ -294,6 +595,12 @@
     <rect x="608" y="212" width="32" height="4" fill="#c8ce8e" />
     <rect x="612" y="216" width="24" height="4" fill="#f6d98e" />
     <rect x="624" y="192" width="4" height="4" fill="#bdc58a" />
+    <path
+      d="M618 198h12v1h-12Zm-7 14h27v1h-27Zm3 5h20v1h-20ZM625 220h1v29h-1Zm-6 33h14v1h-14Z"
+      fill="#c6d394"
+    />
+    <path d="M617 201h1v9h-1Zm17 0h1v9h-1Zm-9 15h1v2h-1Z" fill="#627e50" />
+    <path d="M625 194h2v1h-2Zm-4 22h9v1h-9Z" fill="#fff1b7" />
   </g>
 
   <!-- A letter tray: its base occupies only the declared inbox collision area. -->
@@ -310,6 +617,16 @@
     <rect x="692" y="256" width="40" height="4" fill="#fff0ce" />
     <path d="M696 264h24v4h-24Zm0 8h12v4h-12Z" fill="#bdb28c" />
     <rect x="740" y="264" width="8" height="12" fill="#c79969" />
+    <path
+      d="M678 282h76v1h-76Zm0 1h1v42h-1Zm3 2h69v1h-69ZM678 274h76v1h-76Z"
+      fill="#dfc895"
+    />
+    <path
+      d="M690 258h44v1h-44Zm0 1h1v15h-1ZM696 262h30v1h-30Zm0 4h26v1h-26Zm0 4h14v1h-14Z"
+      fill="#bdb18b"
+    />
+    <path d="M692 260h40v1h-40Zm1 44h46v1h-46Zm3 2h40v1h-40Z" fill="#e5d19b" />
+    <path d="M686 312h14v1h-14Zm32 1h20v1h-20Zm24-47h1v8h-1Z" fill="#a28b5c" />
   </g>
 
   <!-- A walkable woven rug adds warmth while leaving the central aisle clear. -->
@@ -361,6 +678,37 @@
       fill="#d59f72"
     />
     <path d="M224 496h4v8h-4Zm8 0h4v8h-4Zm8-8h4v12h-4Z" fill="#d7b17f" />
+    <path
+      d="M86 410h172v2H86Zm-8 16h12v1H78Zm176 0h12v1h-12ZM102 490h64v1h-64Zm76 0h64v1h-64ZM100 526h144v1H100Z"
+      fill="#b4bf88"
+    />
+    <path
+      d="M94 432h1v40h-1Zm80 56h2v28h-2Zm72-54h1v38h-1ZM78 438h1v80h-1Zm176 0h1v80h-1Z"
+      fill="#55764c"
+    />
+    <rect
+      x="112"
+      y="436"
+      width="28"
+      height="24"
+      fill="url(#pixel-cream-weave)"
+    />
+    <rect
+      x="196"
+      y="444"
+      width="24"
+      height="20"
+      fill="url(#pixel-sage-weave)"
+    />
+    <path
+      d="M114 438h24v1h-24Zm-3 1h1v19h-1Zm87 7h20v1h-20Zm-3 1h1v15h-1Z"
+      fill="#fbefcd"
+    />
+    <path
+      d="M232 420h1v74h-1Zm8 2h1v68h-1ZM226 426h19v1h-19Zm0 16h19v1h-19Zm0 16h19v1h-19Zm0 16h17v1h-17Zm0 16h15v1h-15Z"
+      fill="#e0b785"
+    />
+    <path d="M226 499h1v4h-1Zm8 0h1v4h-1Zm8-8h1v8h-1Z" fill="#f0d3a0" />
   </g>
 
   <!-- A leafy plant and curled cat share one compact, blocked corner. -->
@@ -376,6 +724,15 @@
     <path d="M848 460h12v4h4v12h-12v-4h-4Z" fill="#5c7b4b" />
     <path d="M876 452h12v4h4v12h-4v4h-12v-4h-4v-12h4Z" fill="#789452" />
     <path d="M860 440h8v4h-8Zm20 16h8v4h-8Z" fill="#a7b978" />
+    <path
+      d="M869 448h1v46h-1Zm-7-8h1v12h-1Zm18 16h1v12h-1Zm-29 8h1v10h-1Z"
+      fill="#bccb8c"
+    />
+    <path
+      d="M861 502h24v1h-24Zm2 8h1v12h-1Zm16 1h1v12h-1Zm-17-29h2v2h-2Z"
+      fill="#e7b77e"
+    />
+    <path d="M858 505h2v2h-2Zm25 2h1v3h-1Zm-23-9h7v1h-7Z" fill="#997343" />
   </g>
   <g class="room-cat">
     <path
@@ -409,6 +766,28 @@
       class="cat-tail"
     />
     <path d="M824 484h4v8h-4Zm8 0h4v8h-4Z" fill="#bd925e" />
+    <path
+      d="M794 470h50v1h-50Zm-8 8h2v14h-2Zm72 2h2v12h-2ZM796 530h48v1h-48Z"
+      fill="#b5bd88"
+    />
+    <path
+      d="M798 482h6v1h-6Zm7 0h2v6h-2Zm18 0h2v6h-2ZM818 478h18v1h-18Zm2 4h13v1h-13Z"
+      fill="#f2d296"
+    />
+    <rect x="802" y="493" width="22" height="15" fill="#ddb97d" />
+    <path
+      d="M804 496h3v1h-3Zm12 0h3v1h-3Zm-5 5h2v2h-2Zm0 3h1v2h-1Zm-7-1h3v1h-3Zm13 0h3v1h-3Z"
+      fill="#775d41"
+    />
+    <path
+      d="M801 499h4v1h-4Zm18 1h5v1h-5Zm-18 5h4v1h-4Zm18 0h5v1h-5Z"
+      fill="#f1cf94"
+    />
+    <path
+      d="M825 485h2v4h-2Zm4 0h1v6h-1Zm5 1h2v4h-2Zm-18 24h4v1h-4Zm8 0h4v1h-4Z"
+      fill="#bd915b"
+    />
+    <path d="M819 490h10v1h-10Zm4 3h11v1h-11Zm-6 13h9v1h-9Z" fill="#efd29c" />
   </g>
 
   <!-- Worn edges and a few loose floor pixels finish the room without adding obstacles. -->

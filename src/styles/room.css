@@ -10,7 +10,7 @@
   height: 100svh;
   height: 100dvh;
   overflow: hidden;
-  background: #25243a;
+  background: #302b32;
   color: var(--room-ink);
 }
 .room-page main,
@@ -24,7 +24,11 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: #25243a;
+  background: #302b32;
+  background-image:
+    linear-gradient(90deg, #ffffff03 1px, transparent 1px),
+    linear-gradient(#ffffff03 1px, transparent 1px);
+  background-size: 8px 8px;
 }
 .room-stage {
   position: relative;
@@ -38,6 +42,8 @@
 .room-viewport {
   position: absolute;
   inset: 0;
+  padding-block: 6svh;
+  padding-block: 6dvh;
   overflow: auto;
   overscroll-behavior: contain;
   scrollbar-width: none;
@@ -55,10 +61,11 @@
   position: relative;
   top: 0;
   left: 0;
-  width: max(100vw, 150svh);
-  width: max(100vw, 150dvh);
-  height: max(100svh, 66.666667vw);
-  height: max(100dvh, 66.666667vw);
+  width: 132svh;
+  width: 132dvh;
+  height: 88svh;
+  height: 88dvh;
+  margin-inline: auto;
   transform: none;
 }
 .room-art,

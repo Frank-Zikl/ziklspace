@@ -8,7 +8,7 @@
 
 2026-10-21 已通过 Supabase 插件部署两项迁移和 `submit-thought` Edge Function。三张业务表均启用 RLS；提权函数位于不对 Data API 暴露的 `private` schema。已在真实云端事务中验证房主写入、访客只读、私有草稿、历史记录和便签重写回滚，全部测试数据均已回滚。
 
-房主邮箱已由管理员配置在 `private.room_owner_setup`，没有写入仓库。该邮箱对应的 Auth 用户确认后，数据库会自动登记唯一房主。Auth 用户创建、登录回跳和 `ROOM_INGEST_TOKEN` 仍需在控制台配置；当前插件没有对应管理工具。函数已部署不代表已启用投递：密钥未配置时接口拒绝写入。
+房主邮箱已由管理员配置在 `private.room_owner_setup`，没有写入仓库。Auth 用户已创建且邮箱已确认，真实数据库查询确认房主权限已生效。用户已完成正式网址的登录回跳配置。`ROOM_INGEST_TOKEN` 暂不配置，AI 草稿可先通过网站手动导入；只有启用外部 HTTP 工具自动投递时才需要此密钥。函数已部署不代表已启用投递：密钥未配置时接口拒绝写入。
 
 使用 CLI 时先运行 `supabase link --project-ref ewujzsimqbojxvltzvav`，确认目标后再执行迁移。
 
@@ -27,7 +27,7 @@
 4. 复制 `.env.example` 为 `.env`，保留已填写的项目 URL，并填写该项目的 Publishable Key。Vercel 中添加同名的 `PUBLIC_SUPABASE_URL`、`PUBLIC_SUPABASE_PUBLISHABLE_KEY`，然后重新构建部署。两者是供浏览器使用的公开连接信息；Service Role / Secret Key 不得进入前端环境变量。
 5. 登录后验证写字板保存、便签改写、收件箱草稿与发布。在未登录的窗口确认只能看到公开内容。
 
-当前项目的公开 URL 和 Publishable Key 已配置在 `vercel.json` 的 `env` 中，供 Vercel 构建使用。Publishable Key 会进入浏览器，不是管理员凭据；数据保护依赖上述 RLS 和房主登记。更换项目或轮换公开密钥时，应同步修改此配置。
+当前项目的公开 URL 和 Publishable Key 已配置在 Vercel 项目的 Production 环境变量中，构建和运行时均可用。不要使用 `vercel.json` 的运行时 `env` 为 Astro 静态客户端提供构建变量，否则会发布缺少登录入口的网页。`astro.config.mjs` 会在 Vercel 缺少必要构建变量时拒绝构建。Publishable Key 会进入浏览器，不是管理员凭据；数据保护依赖上述 RLS 和房主登记。更换项目或轮换公开密钥时，应更新项目环境变量并重新部署。Preview 环境需单独配置相应项目的公开连接信息。
 
 `.vercelignore` 排除本地环境变量文件；本地开发使用未提交的 `.env`。
 

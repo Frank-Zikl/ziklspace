@@ -110,14 +110,44 @@ function initializeRoom(root: HTMLElement) {
     },
     { passive: true },
   );
+  let pointerFocusTarget: HTMLElement | null = null;
+  let pointerFocusTimer: number | undefined;
+  const clearPointerFocus = () => {
+    window.clearTimeout(pointerFocusTimer);
+    pointerFocusTarget = null;
+  };
+  viewport.addEventListener(
+    'pointerdown',
+    (event) => {
+      window.clearTimeout(pointerFocusTimer);
+      pointerFocusTarget = (event.target as HTMLElement).closest<HTMLElement>(
+        '.room-hotspot',
+      );
+    },
+    { capture: true },
+  );
+  window.addEventListener(
+    'pointerup',
+    () => {
+      // Touch browsers may synthesize mouse focus after pointerup. Keep the target
+      // stationary through that event sequence, then allow later programmatic focus.
+      pointerFocusTimer = window.setTimeout(clearPointerFocus, 0);
+    },
+    { capture: true },
+  );
+  window.addEventListener('pointercancel', clearPointerFocus, {
+    capture: true,
+  });
+  window.addEventListener('blur', clearPointerFocus);
+  viewport.addEventListener('keydown', clearPointerFocus);
   viewport.addEventListener('focusin', (event) => {
     const object = (event.target as HTMLElement).closest<HTMLElement>(
       '.room-hotspot',
     );
     viewport.scrollTop = 0;
     // Keep pointer targets stationary between pressing and releasing a click.
-    // Keyboard focus may reveal objects reached by Tab on a panned mobile scene.
-    if (!object?.matches(':focus-visible')) return;
+    // Tab and explicit focus() can reveal objects regardless of focus-ring heuristics.
+    if (!object || object === pointerFocusTarget) return;
     const view = viewport.getBoundingClientRect();
     const target = object.getBoundingClientRect();
     const inset = 12;

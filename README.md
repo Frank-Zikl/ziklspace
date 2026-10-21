@@ -1,6 +1,6 @@
 # Ziklspace
 
-正面敞开的 2.5D 卡通房间。Astro、TypeScript、MDX；Supabase 保存房主内容并控制读写权限。
+铺满屏幕的 2.5D 微缩室内空间，采用暖白灰泥、浅木、亚麻与灰绿色金属质感。Astro、TypeScript、MDX；Supabase 保存房主内容并控制读写权限。
 
 ## 开发
 
@@ -60,7 +60,7 @@ npm run dev -- --ignore-lock --port 4321
 
 - `src/components/room/RoomScene.astro`：可缩放的房间插画。
 - `src/components/room/PersonalRoom.astro`：物件、入口与阅读面板。
-- `src/styles/room.css`：卡通材质、空间、入场和响应式布局。
+- `src/styles/room.css`：室内材质、阅读界面、入场和响应式布局。
 - `src/scripts/room.ts`：房间交互、编辑、导入和发布。
 - `src/lib/room-api.ts`：Supabase 会话、读写和并发冲突处理。
 - `supabase/migrations`：表结构、RLS、历史与重写事务。
@@ -91,4 +91,4 @@ GitHub Actions 已配置格式、类型和完整测试，并保留 `room-ui-veri
 
 ## 设计约定
 
-统一为温暖卡通房间，正面开放，物件行为符合用途。首页场景占满视口，不显示场景之外的文字或导航；对象名称在悬停或聚焦时显示，操作与反馈留在房间内。私有思考发布前必须由房主检查，AI 不能自动代表用户表达感受。
+统一为克制的微缩建筑模型质感，以受光面、背光面和接触阴影体现体积，减少粗描边与装饰纹理。房间正面开放，物件行为符合用途。首页场景占满视口，不显示场景之外的文字或导航；对象名称在悬停或聚焦时显示，操作与反馈留在房间内。私有思考发布前必须由房主检查，AI 不能自动代表用户表达感受。

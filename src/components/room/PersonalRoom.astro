@@ -139,7 +139,6 @@ const objects = [
   >
     <header class="dialog-heading">
       <div>
-        <span class="object-number">01 / WALL</span>
         <h2 id="whiteboard-title">写字板</h2>
       </div>
       <button type="button" data-close aria-label="关闭写字板">
@@ -176,7 +175,6 @@ const objects = [
   >
     <header class="dialog-heading">
       <div>
-        <span class="object-number">02 / WALL</span>
         <h2 id="stickies-title">便签板</h2>
       </div>
       <button type="button" data-close aria-label="关闭便签板">
@@ -229,7 +227,6 @@ const objects = [
   >
     <header class="dialog-heading">
       <div>
-        <span class="object-number">03 / SHELF</span>
         <h2 id="books-title">书架</h2>
       </div>
       <button type="button" data-close aria-label="关闭书架">
@@ -245,7 +242,6 @@ const objects = [
           style={`--book-color:${['#648477', '#b77b63', '#a48b58'][index % 3]}`}
         >
           <span class="book-cover-title">{book.data.title}</span>
-          <span class="book-cover-mark">Z</span>
           <span class="book-cover-author">{book.data.author}</span>
           {book.data.sample && <span class="book-sample">样稿</span>}
         </button>
@@ -273,7 +269,6 @@ const objects = [
   >
     <header class="dialog-heading">
       <div>
-        <span class="object-number">04 / DESK</span>
         <h2 id="projects-title">电脑</h2>
       </div>
       <button type="button" data-close aria-label="关闭电脑">
@@ -281,7 +276,6 @@ const objects = [
       </button>
     </header>
     <div class="computer-screen">
-      <span class="computer-prompt">zikl@room ~/projects</span>
       {projects.map((project) => (
         <a class="project-file" href={`/projects/${project.id}/`}>
           <span aria-hidden="true">▱</span>
@@ -302,7 +296,6 @@ const objects = [
   >
     <header class="dialog-heading">
       <div>
-        <span class="object-number">05 / DESK</span>
         <h2 id="notebook-title">笔记本</h2>
       </div>
       <button type="button" data-close aria-label="关闭笔记本">
@@ -330,7 +323,6 @@ const objects = [
   >
     <header class="dialog-heading">
       <div>
-        <span class="object-number">06 / WALL</span>
         <h2 id="calendar-title">日历</h2>
       </div>
       <button type="button" data-close aria-label="关闭日历">
@@ -360,7 +352,6 @@ const objects = [
   >
     <header class="dialog-heading">
       <div>
-        <span class="object-number">KEY / 01</span>
         <h2 id="account-title">房主</h2>
       </div>
       <button type="button" data-close aria-label="关闭登录">
@@ -391,7 +382,6 @@ const objects = [
   <dialog class="room-dialog" data-dialog="inbox" aria-labelledby="inbox-title">
     <header class="dialog-heading">
       <div>
-        <span class="object-number">INBOX / PRIVATE</span>
         <h2 id="inbox-title">收件箱</h2>
       </div>
       <button type="button" data-close aria-label="关闭收件箱">
@@ -414,7 +404,6 @@ const objects = [
   >
     <header class="dialog-heading">
       <div>
-        <span class="object-number">DRAFT / PRIVATE</span>
         <h2 id="thought-editor-title">整理思考</h2>
       </div>
       <button type="button" data-close aria-label="关闭思考编辑器">

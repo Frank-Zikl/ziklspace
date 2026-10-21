@@ -111,6 +111,15 @@ export async function loadRevisions(id: string): Promise<RoomRevision[]> {
   if (error) throw new Error('旧字迹暂时无法读取。');
   return data as RoomRevision[];
 }
+export class LoginRateLimitError extends Error {
+  constructor(public readonly retryAfterSeconds: number) {
+    super(
+      `请求过于频繁，请先检查收件箱和垃圾邮件，${retryAfterSeconds} 秒后再试。`,
+    );
+    this.name = 'LoginRateLimitError';
+  }
+}
+
 export async function login(email: string) {
   const { error } = await client().auth.signInWithOtp({
     email,
@@ -119,5 +128,10 @@ export async function login(email: string) {
       emailRedirectTo: window.location.origin + '/',
     },
   });
-  if (error) throw new Error('登录邮件未能发送，请确认房主邮箱或稍后重试。');
+  if (error?.status === 429 || error?.code === 'over_email_send_rate_limit') {
+    const wait = error.message.match(/after\s+(\d+)\s+seconds?/i);
+    const seconds = wait ? Number(wait[1]) : 60;
+    throw new LoginRateLimitError(Math.max(1, Math.min(seconds, 3600)));
+  }
+  if (error) throw new Error('登录邮件暂未能发送，请稍后重试。');
 }

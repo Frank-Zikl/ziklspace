@@ -1,6 +1,60 @@
 import { test, expect } from '@playwright/test';
 import { mockRoom, enterRoom, entry } from './room-fixture';
 
+test('successful login email requests show confirmation and wait before resending', async ({
+  page,
+}) => {
+  await page.clock.install();
+  await mockRoom(page);
+  await enterRoom(page);
+  await page.getByRole('button', { name: '房主登录', exact: true }).click();
+  await page.locator('[data-login-email]').fill('owner@example.test');
+  const send = page.locator('[data-login-form] button');
+  await send.click();
+  await expect(page.locator('[data-auth-status]')).toContainText(
+    '登录邮件已发送',
+  );
+  await expect(send).toBeDisabled();
+  await expect(send).toContainText('秒后可重发');
+  await page.clock.fastForward(60000);
+  await expect(send).toBeEnabled();
+  await expect(send).toHaveText('发送登录链接');
+});
+
+test('email rate limits explain the wait and respect the server cooldown', async ({
+  page,
+}) => {
+  await page.clock.install();
+  await mockRoom(page);
+  await page.route(
+    'https://room-test.supabase.co/auth/v1/otp**',
+    async (route) => {
+      await route.fulfill({
+        status: 429,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          code: 'over_email_send_rate_limit',
+          msg: 'For security purposes, you can only request this after 32 seconds.',
+        }),
+        headers: { 'Access-Control-Allow-Origin': '*' },
+      });
+    },
+  );
+  await enterRoom(page);
+  await page.getByRole('button', { name: '房主登录', exact: true }).click();
+  await page.locator('[data-login-email]').fill('owner@example.test');
+  const send = page.locator('[data-login-form] button');
+  await send.click();
+  await expect(page.locator('[data-auth-status]')).toContainText(
+    '请求过于频繁',
+  );
+  await expect(page.locator('[data-auth-status]')).toContainText('32 秒后再试');
+  await expect(send).toBeDisabled();
+  await page.clock.fastForward(32000);
+  await expect(send).toBeEnabled();
+  await expect(send).toHaveText('发送登录链接');
+});
+
 test('enters through the door and restores scene focus', async ({
   page,
 }, testInfo) => {

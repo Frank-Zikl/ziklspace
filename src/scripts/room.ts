@@ -8,6 +8,7 @@ import {
   rewriteSticky,
   loadRevisions,
   login,
+  LoginRateLimitError,
   type RoomEntry,
 } from '../lib/room-api';
 
@@ -567,18 +568,41 @@ function initializeRoom(root: HTMLElement) {
     }
   }
   const loginForm = find<HTMLFormElement>('[data-login-form]');
+  const loginButton = loginForm.querySelector<HTMLButtonElement>('button')!;
+  let loginCooldownUntil = 0;
+  let loginCooldownTimer: number | undefined;
+  function waitToResend(seconds: number) {
+    window.clearInterval(loginCooldownTimer);
+    loginCooldownUntil = Date.now() + seconds * 1000;
+    const update = () => {
+      const remaining = Math.max(
+        0,
+        Math.ceil((loginCooldownUntil - Date.now()) / 1000),
+      );
+      loginButton.disabled = remaining > 0;
+      loginButton.textContent = remaining
+        ? `${remaining} 秒后可重发`
+        : '发送登录链接';
+      if (!remaining) window.clearInterval(loginCooldownTimer);
+    };
+    update();
+    loginCooldownTimer = window.setInterval(update, 1000);
+  }
   loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const button = loginForm.querySelector<HTMLButtonElement>('button')!;
-    button.disabled = true;
+    if (loginButton.disabled) return;
+    loginButton.disabled = true;
     try {
       await login(find<HTMLInputElement>('[data-login-email]').value.trim());
       find('[data-auth-status]').textContent =
-        '请检查房主邮箱，用同一浏览器打开登录链接。';
+        '登录邮件已发送，请检查收件箱和垃圾邮件，用同一浏览器打开最新链接。';
+      waitToResend(60);
     } catch (error) {
       find('[data-auth-status]').textContent = message(error);
+      if (error instanceof LoginRateLimitError)
+        waitToResend(error.retryAfterSeconds);
     } finally {
-      button.disabled = false;
+      loginButton.disabled = Date.now() < loginCooldownUntil;
     }
   });
   function clearPrivateState() {
